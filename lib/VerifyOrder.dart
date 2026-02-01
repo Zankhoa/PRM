@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:project/CreateProduct.dart';
 import 'package:project/UpdateProduct.dart';
 
-class MenuManagerScreen extends StatelessWidget {
-  const MenuManagerScreen({super.key});
+class VerifyOrder extends StatelessWidget {
+  const VerifyOrder({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -12,7 +12,7 @@ class MenuManagerScreen extends StatelessWidget {
       appBar: AppBar(
         leading: const Icon(Icons.menu, color: Colors.black),
         title: const Text(
-          "Management Product",
+          "Order Product",
           style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
         ),
         centerTitle: true,
@@ -56,45 +56,9 @@ class MenuManagerScreen extends StatelessWidget {
                     ),
                   ),
                 ),
-                const SizedBox(width: 12),
-                // Nút Tạo mới đặt ở trên theo ý bạn
-                ElevatedButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const CreateProduct()),
-                    );
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFF00E676),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    padding: const EdgeInsets.symmetric(
-                      vertical: 15,
-                      horizontal: 15,
-                    ),
-                  ),
-                  child: const Icon(Icons.add, color: Colors.white),
-                ),
               ],
             ),
           ),
-
-          // 2. Categories
-          SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: Row(
-              children: [
-                _buildCategoryChip("All Items", isSelected: true),
-                _buildCategoryChip("Main Course"),
-                _buildCategoryChip("Starters"),
-              ],
-            ),
-          ),
-
           // 3. Menu List
           Expanded(
             child: ListView(
@@ -128,7 +92,7 @@ class MenuManagerScreen extends StatelessWidget {
       ),
       // Thanh điều hướng dưới cùng
       bottomNavigationBar: BottomNavigationBar(
-        type: BottomNavigationBarType.fixed,
+        type: BottomNavigationBarType.fixed,  
         items: const [
           BottomNavigationBarItem(
             icon: Icon(Icons.grid_view_rounded),
@@ -151,20 +115,20 @@ class MenuManagerScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildCategoryChip(String label, {bool isSelected = false}) {
-    return Container(
-      margin: const EdgeInsets.only(right: 8),
-      child: ChoiceChip(
-        label: Text(label),
-        selected: isSelected,
-        selectedColor: const Color(0xFF00E676),
-        labelStyle: TextStyle(color: isSelected ? Colors.white : Colors.black),
-        backgroundColor: Colors.white,
-      ),
-    );
-  }
+  // Widget _buildCategoryChip(String label, {bool isSelected = false}) {
+  //   return Container(
+  //     margin: const EdgeInsets.only(right: 8),
+  //     child: ChoiceChip(
+  //       label: Text(label),
+  //       selected: isSelected,
+  //       selectedColor: const Color(0xFF00E676),
+  //       labelStyle: TextStyle(color: isSelected ? Colors.white : Colors.black),
+  //       backgroundColor: Colors.white,
+  //     ),
+  //   );
+  // }
 
-  Widget _buildMenuCard(
+ Widget _buildMenuCard(
     String title,
     String subtitle,
     String price,
@@ -177,9 +141,16 @@ class MenuManagerScreen extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(16),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.05),
+            blurRadius: 5,
+          ),
+        ],
       ),
       child: Row(
         children: [
+          // Phần hiển thị hình ảnh
           Container(
             width: 60,
             height: 60,
@@ -194,6 +165,7 @@ class MenuManagerScreen extends StatelessWidget {
             ),
           ),
           const SizedBox(width: 12),
+          // Phần thông tin sản phẩm
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -224,26 +196,26 @@ class MenuManagerScreen extends StatelessWidget {
               ],
             ),
           ),
+          // --- THAY ĐỔI 2 ICON TẠI ĐÂY ---
           Column(
             children: [
+              // Icon Xác nhận (Dấu tích xanh)
               IconButton(
-                onPressed: () {Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => UpdateProduct(
-                      initialData: {
-                        'title': title,
-                        'subtitle': subtitle,
-                        'price': price,
-                      },
-                    ),
-                  ),
-                );},
-                icon: const Icon(Icons.edit_outlined, color: Colors.blueGrey),
+                onPressed: () {
+                  // Xử lý logic xác nhận đơn hàng tại đây
+                  print("Đã xác nhận: $title");
+                },
+                icon: const Icon(Icons.check_circle_outline, color: Colors.green),
+                tooltip: "Xác nhận",
               ),
+              // Icon Hủy bỏ (Dấu X đỏ)
               IconButton(
-                onPressed: () {},
-                icon: const Icon(Icons.delete_outline, color: Colors.redAccent),
+                onPressed: () {
+                  // Xử lý logic hủy bỏ đơn hàng tại đây
+                  print("Đã hủy bỏ: $title");
+                },
+                icon: const Icon(Icons.cancel_outlined, color: Colors.redAccent),
+                tooltip: "Hủy bỏ",
               ),
             ],
           ),
