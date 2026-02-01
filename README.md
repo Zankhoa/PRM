@@ -1,2 +1,3 @@
-# PRM
-This is project of subject PRM
+# project
+
+A new Flutter project.
