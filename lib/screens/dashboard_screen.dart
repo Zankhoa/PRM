@@ -294,6 +294,15 @@ class _DashboardScreenState extends State<DashboardScreen> {
           children: [
             Expanded(
               child: _buildActionButton(
+                'Xem menu\n(Khách hàng)',
+                Icons.restaurant_menu,
+                const Color(0xFF6C63FF),
+                () => Navigator.pushNamed(context, '/user-products'),
+              ),
+            ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: _buildActionButton(
                 'Quản lý\nGiảm giá',
                 Icons.discount_outlined,
                 const Color(0xFFFF6584),
@@ -305,7 +314,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
               child: _buildActionButton(
                 'Thêm mã\nGiảm giá',
                 Icons.add_circle_outline,
-                const Color(0xFF6C63FF),
+                const Color(0xFF5A52D5),
                 () => Navigator.pushNamed(context, '/add-discount'),
               ),
             ),
@@ -549,12 +558,14 @@ class _DashboardScreenState extends State<DashboardScreen> {
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
               _buildNavItem(Icons.dashboard, 'Dashboard', true, () {}),
-              _buildNavItem(Icons.discount_outlined, 'Đơn hàng', false, 
-                () => Navigator.pushNamed(context, '/verify-order')),
+              _buildNavItem(Icons.restaurant_menu, 'Menu', false,
+                  () => Navigator.pushNamed(context, '/user-products')),
+              _buildNavItem(Icons.receipt_long, 'Đơn hàng', false,
+                  () => Navigator.pushNamed(context, '/verify-order')),
+              _buildNavItem(Icons.shopping_bag, 'Sản phẩm', false,
+                  () => Navigator.pushNamed(context, '/manage-product')),
               _buildNavItem(Icons.person_outline, 'Hồ sơ', false,
-                () => Navigator.pushNamed(context, '/profile')),
-               _buildNavItem(Icons.person_outline, 'Quản lý sản phẩm', false,
-                () => Navigator.pushNamed(context, '/manage-product')),
+                  () => Navigator.pushNamed(context, '/profile')),
             ],
           ),
         ),

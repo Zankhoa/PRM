@@ -17,6 +17,12 @@ import 'screens/edit_profile_screen.dart';
 import 'screens/discount_list_screen.dart';
 import 'screens/add_discount_screen.dart';
 
+import 'user/product_list_user_screen.dart';
+import 'user/cart_user_screen.dart';
+import 'user/discount_list_user_screen.dart';
+import 'user/order_status_user_screen.dart';
+import 'user/payment_user_screen.dart';
+
 void main() {
   runApp(const ShopOwnerApp());
 }
@@ -74,9 +80,21 @@ class ShopOwnerApp extends StatelessWidget {
         '/add-discount': (context) => const AddDiscountScreen(),
         '/create-product': (context) => const CreateProduct(),
         '/manage-product': (context) => const ListProductManagement(),
-        '/update-product': (context) => const UpdateProduct(),
+        '/update-product': (context) {
+          final args = ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
+          return UpdateProduct(initialData: args);
+        },
         '/history-order': (context) => const OrderHistory(),
         '/verify-order': (context) => const VerifyOrder(),
+        // User flow (frontend)
+        '/user-products': (context) => const ProductListUserScreen(),
+        '/user-cart': (context) => const CartUserScreen(),
+        '/user-discounts': (context) => const DiscountListUserScreen(),
+        '/user-orders': (context) => const OrderStatusUserScreen(),
+        '/user-payment': (context) {
+          final args = ModalRoute.of(context)?.settings.arguments;
+          return PaymentUserScreen();
+        },
       },
     );
   }
