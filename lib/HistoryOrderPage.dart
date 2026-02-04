@@ -1,17 +1,14 @@
 import 'package:flutter/material.dart';
 
-// Đừng quên file AppColors bạn đã tạo nhé!
-class OrderHistoryDesign extends StatelessWidget {
-  const OrderHistoryDesign({super.key});
-
-
+class OrderHistory extends StatelessWidget {
+  const OrderHistory({super.key});
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        leading: Icon(Icons.arrow_back_ios_new, color: Colors.black, size: 20),
-        title: Text(
+        leading: const Icon(Icons.arrow_back_ios_new, color: Colors.black, size: 20),
+        title: const Text(
           "Order History",
           style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
         ),
@@ -28,7 +25,8 @@ class OrderHistoryDesign extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
             child: Container(
               decoration: BoxDecoration(
-               border: Border.all(color: const Color.fromARGB(255, 5, 2, 2).withOpacity(0.2)),
+                border: Border.all(
+                    color: const Color.fromARGB(255, 5, 2, 2).withOpacity(0.2)),
                 borderRadius: BorderRadius.circular(15),
               ),
               child: const TextField(
@@ -60,28 +58,28 @@ class OrderHistoryDesign extends StatelessWidget {
             child: ListView(
               padding: const EdgeInsets.symmetric(horizontal: 16),
               children: [
-                _buildOrderItem(
+                buildOrderItem(
                   "Starbucks Reserve",
                   "Oct 24, 10:30 AM",
                   "\$5.50",
                   "Completed",
                   Colors.green,
                 ),
-                _buildOrderItem(
+                buildOrderItem(
                   "Bubble Tea Co",
                   "Oct 22, 02:15 PM",
                   "\$6.00",
                   "Completed",
                   Colors.green,
                 ),
-                _buildOrderItem(
+                buildOrderItem(
                   "Green Leaf Tea",
                   "Oct 20, 09:45 AM",
                   "\$4.25",
                   "Cancelled",
                   Colors.red,
                 ),
-                _buildOrderItem(
+                buildOrderItem(
                   "Fruity Fresh",
                   "Oct 18, 12:00 PM",
                   "\$7.20",
@@ -93,41 +91,82 @@ class OrderHistoryDesign extends StatelessWidget {
           ),
         ],
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        type: BottomNavigationBarType.fixed, // Giữ các icon cố định vị trí
-        currentIndex: 2, // Giả sử 'History' là index thứ 2 (đang được chọn)
-        selectedItemColor: Colors.greenAccent[400], // Màu xanh lá như trong ảnh
-        unselectedItemColor: Colors.grey,
-        showUnselectedLabels: true,
-        selectedLabelStyle: const TextStyle(
-          fontWeight: FontWeight.bold,
-          fontSize: 12,
-        ),
-        unselectedLabelStyle: const TextStyle(fontSize: 12),
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home_outlined),
-            activeIcon: Icon(Icons.home),
-            label: 'Home',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.shopping_basket_outlined),
-            activeIcon: Icon(Icons.shopping_basket),
-            label: 'Order',
-          ),
-          BottomNavigationBarItem(icon: Icon(Icons.history), label: 'History'),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person_outline),
-            activeIcon: Icon(Icons.person),
-            label: 'Profile',
+      // Thanh điều hướng dưới cùng
+      bottomNavigationBar: buildBottomNav(context),
+    );
+  }
+
+  Widget buildBottomNav(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.white,
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.1),
+            blurRadius: 10,
+            offset: const Offset(0, -2),
           ),
         ],
+      ),
+      child: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              buildNavItem(Icons.discount_outlined, 'Dashboard', false,
+                  () => Navigator.pushNamed(context, '/dashboard')),
+              buildNavItem(Icons.discount_outlined, 'Đơn hàng', false,
+                  () => Navigator.pushNamed(context, '/verify-order')),
+              buildNavItem(Icons.person_outline, 'Hồ sơ', false,
+                  () => Navigator.pushNamed(context, '/profile')),
+              buildNavItem(Icons.person_outline, 'Quản lý sản phẩm', true,
+                  () => Navigator.pushNamed(context, '/manage-product')),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget buildNavItem(
+      IconData icon, String label, bool isActive, VoidCallback onTap) {
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(12),
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+        decoration: BoxDecoration(
+          color: isActive
+              ? const Color(0xFF6C63FF).withOpacity(0.1)
+              : Colors.transparent,
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(
+              icon,
+              color: isActive ? const Color(0xFF6C63FF) : Colors.grey,
+              size: 24,
+            ),
+            const SizedBox(height: 4),
+            Text(
+              label,
+              style: TextStyle(
+                fontSize: 12,
+                color: isActive ? const Color(0xFF6C63FF) : Colors.grey,
+                fontWeight: isActive ? FontWeight.bold : FontWeight.normal,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
 
   // Widget con cho từng Item đơn hàng
-  Widget _buildOrderItem(
+  Widget buildOrderItem(
     String name,
     String date,
     String price,
