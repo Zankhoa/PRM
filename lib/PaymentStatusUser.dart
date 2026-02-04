@@ -62,7 +62,7 @@ class PaymentStatusUser extends StatelessWidget {
                 child: Text(status, style: TextStyle(color: color, fontWeight: FontWeight.bold)),
               ),
               const SizedBox(height: 8),
-              Text('2d ago', style: const TextStyle(color: Colors.grey, fontSize: 12)),
+              const Text('2d ago', style: TextStyle(color: Colors.grey, fontSize: 12)),
             ],
           )
         ],

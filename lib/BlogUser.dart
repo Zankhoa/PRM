@@ -47,10 +47,10 @@ class BlogUser extends StatelessWidget {
                 ),
               ),
               const SizedBox(width: 12),
-              Expanded(
+              const Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: const [
+                  children: [
                     Text('Healthy Drinks to Try', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
                     SizedBox(height: 4),
                     Text('By Admin • 2 days ago', style: TextStyle(color: Colors.grey, fontSize: 12)),
@@ -72,8 +72,8 @@ class BlogUser extends StatelessWidget {
                 onPressed: () {},
                 child: const Text('Read more'),
               ),
-              Row(
-                children: const [
+              const Row(
+                children: [
                   Icon(Icons.thumb_up_alt_outlined, size: 20),
                   SizedBox(width: 8),
                   Text('124'),

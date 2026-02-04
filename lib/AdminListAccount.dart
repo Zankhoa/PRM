@@ -22,13 +22,13 @@ class AdminListAccount extends StatelessWidget {
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
               decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(12), boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.03), blurRadius: 4)]),
-              child: Row(
+              child: const Row(
                 children: [
-                  const Expanded(child: Text('Name', style: TextStyle(fontWeight: FontWeight.bold))),
-                  const SizedBox(width: 8),
-                  const Expanded(child: Text('Email', style: TextStyle(fontWeight: FontWeight.bold))),
-                  const SizedBox(width: 8),
-                  const SizedBox(width: 96, child: Text('Actions', style: TextStyle(fontWeight: FontWeight.bold))),
+                  Expanded(child: Text('Name', style: TextStyle(fontWeight: FontWeight.bold))),
+                  SizedBox(width: 8),
+                  Expanded(child: Text('Email', style: TextStyle(fontWeight: FontWeight.bold))),
+                  SizedBox(width: 8),
+                  SizedBox(width: 96, child: Text('Actions', style: TextStyle(fontWeight: FontWeight.bold))),
                 ],
               ),
             ),
