@@ -8,14 +8,19 @@ class ListProductManagement extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF8F9FB), // Nền xám nhạt như hình
+      backgroundColor: const Color(0xFFF8F9FB),
       appBar: AppBar(
         leading: const Icon(Icons.menu, color: Colors.black),
         title: const Text(
           "Management Product",
-          style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+          style: TextStyle(
+            color: Colors.black,
+            fontWeight: FontWeight.bold,
+          ),
         ),
         centerTitle: true,
+        backgroundColor: Colors.white,
+        elevation: 0,
         actions: const [
           Padding(
             padding: EdgeInsets.only(right: 16),
@@ -25,14 +30,12 @@ class ListProductManagement extends StatelessWidget {
             ),
           ),
         ],
-        backgroundColor: Colors.white,
-        elevation: 0,
       ),
       body: Column(
         children: [
-          // 1. Search Bar & Add Button ở trên
+          /// SEARCH + ADD
           Padding(
-            padding: const EdgeInsets.all(16.0),
+            padding: const EdgeInsets.all(16),
             child: Row(
               children: [
                 Expanded(
@@ -57,23 +60,20 @@ class ListProductManagement extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(width: 12),
-                // Nút Tạo mới đặt ở trên theo ý bạn
                 ElevatedButton(
                   onPressed: () {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => const CreateProduct()),
+                        builder: (_) => const CreateProduct(),
+                      ),
                     );
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color(0xFF00E676),
+                    padding: const EdgeInsets.all(14),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12),
-                    ),
-                    padding: const EdgeInsets.symmetric(
-                      vertical: 15,
-                      horizontal: 15,
                     ),
                   ),
                   child: const Icon(Icons.add, color: Colors.white),
@@ -82,55 +82,56 @@ class ListProductManagement extends StatelessWidget {
             ),
           ),
 
-          // 2. Categories
+          /// CATEGORY
           SingleChildScrollView(
             scrollDirection: Axis.horizontal,
             padding: const EdgeInsets.symmetric(horizontal: 16),
             child: Row(
               children: [
-                _buildCategoryChip("All Items", isSelected: true),
-                _buildCategoryChip("Main Course"),
-                _buildCategoryChip("Starters"),
+                _buildCategoryChip("All Items", true),
+                _buildCategoryChip("Main Course", false),
+                _buildCategoryChip("Starters", false),
               ],
             ),
           ),
 
-          // 3. Menu List
+          /// PRODUCT LIST
           Expanded(
             child: ListView(
               padding: const EdgeInsets.all(16),
               children: [
                 _buildMenuCard(
+                  context,
                   "Truffle Beef Burger",
                   "Main Course • 250g",
                   "\$18.50",
                   true,
-                  context
                 ),
                 _buildMenuCard(
+                  context,
                   "Classic Caesar Salad",
                   "Starters • Healthy Choice",
                   "\$12.00",
                   true,
-                  context
                 ),
                 _buildMenuCard(
+                  context,
                   "Classic Lime Mojito",
                   "OUT OF STOCK",
                   "\$8.00",
                   false,
-                  context
                 ),
               ],
             ),
           ),
         ],
       ),
-      // Thanh điều hướng dưới cùng
-     bottomNavigationBar: _buildBottomNav(context)
+      bottomNavigationBar: _buildBottomNav(context),
     );
   }
- Widget _buildBottomNav(BuildContext context) {
+
+  /// ================= BOTTOM NAV (FIX OVERFLOW) =================
+  Widget _buildBottomNav(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
@@ -143,19 +144,72 @@ class ListProductManagement extends StatelessWidget {
         ],
       ),
       child: SafeArea(
+        child: Row(
+          children: [
+            _navItem(
+              context,
+              icon: Icons.dashboard_outlined,
+              label: "Dashboard",
+              isActive: false,
+              onTap: () => Navigator.pushNamed(context, '/dashboard'),
+            ),
+            _navItem(
+              context,
+              icon: Icons.receipt_long_outlined,
+              label: "Đơn hàng",
+              isActive: false,
+              onTap: () => Navigator.pushNamed(context, '/verify-order'),
+            ),
+            _navItem(
+              context,
+              icon: Icons.person_outline,
+              label: "Hồ sơ",
+              isActive: false,
+              onTap: () => Navigator.pushNamed(context, '/profile'),
+            ),
+            _navItem(
+              context,
+              icon: Icons.inventory_2_outlined,
+              label: "Sản phẩm",
+              isActive: true,
+              onTap: () => Navigator.pushNamed(context, '/manage-product'),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _navItem(
+      BuildContext context, {
+        required IconData icon,
+        required String label,
+        required bool isActive,
+        required VoidCallback onTap,
+      }) {
+    return Expanded(
+      child: InkWell(
+        onTap: onTap,
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
+          padding: const EdgeInsets.symmetric(vertical: 8),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
             children: [
-              _buildNavItem(Icons.discount_outlined, 'Dashboard', false,
-                  () => Navigator.pushNamed(context, '/dashboard')),
-              _buildNavItem(Icons.discount_outlined, 'Đơn hàng', false,
-                  () => Navigator.pushNamed(context, '/verify-order')),
-              _buildNavItem(Icons.person_outline, 'Hồ sơ', false,
-                  () => Navigator.pushNamed(context, '/profile')),
-              _buildNavItem(Icons.person_outline, 'Quản lý sản phẩm', true,
-                  () => Navigator.pushNamed(context, '/manage-product')),
+              Icon(
+                icon,
+                size: 22,
+                color: isActive ? const Color(0xFF6C63FF) : Colors.grey,
+              ),
+              const SizedBox(height: 4),
+              Text(
+                label,
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(
+                  fontSize: 11,
+                  color: isActive ? const Color(0xFF6C63FF) : Colors.grey,
+                  fontWeight: isActive ? FontWeight.bold : FontWeight.normal,
+                ),
+              ),
             ],
           ),
         ),
@@ -163,58 +217,29 @@ class ListProductManagement extends StatelessWidget {
     );
   }
 
-  Widget _buildNavItem(IconData icon, String label, bool isActive, VoidCallback onTap) {
-    return InkWell(
-      onTap: onTap,
-      borderRadius: BorderRadius.circular(12),
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-        decoration: BoxDecoration(
-          color: isActive ? const Color(0xFF6C63FF).withOpacity(0.1) : Colors.transparent,
-          borderRadius: BorderRadius.circular(12),
-        ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(
-              icon,
-              color: isActive ? const Color(0xFF6C63FF) : Colors.grey,
-              size: 24,
-            ),
-            const SizedBox(height: 4),
-            Text(
-              label,
-              style: TextStyle(
-                fontSize: 12,
-                color: isActive ? const Color(0xFF6C63FF) : Colors.grey,
-                fontWeight: isActive ? FontWeight.bold : FontWeight.normal,
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-  Widget _buildCategoryChip(String label, {bool isSelected = false}) {
-    return Container(
-      margin: const EdgeInsets.only(right: 8),
+  /// ================= COMPONENTS =================
+  Widget _buildCategoryChip(String label, bool selected) {
+    return Padding(
+      padding: const EdgeInsets.only(right: 8),
       child: ChoiceChip(
         label: Text(label),
-        selected: isSelected,
+        selected: selected,
         selectedColor: const Color(0xFF00E676),
-        labelStyle: TextStyle(color: isSelected ? Colors.white : Colors.black),
+        labelStyle: TextStyle(
+          color: selected ? Colors.white : Colors.black,
+        ),
         backgroundColor: Colors.white,
       ),
     );
   }
 
   Widget _buildMenuCard(
-    String title,
-    String subtitle,
-    String price,
-    bool isAvailable,
-    BuildContext context,
-  ) {
+      BuildContext context,
+      String title,
+      String subtitle,
+      String price,
+      bool isAvailable,
+      ) {
     return Container(
       margin: const EdgeInsets.only(bottom: 16),
       padding: const EdgeInsets.all(12),
@@ -224,17 +249,13 @@ class ListProductManagement extends StatelessWidget {
       ),
       child: Row(
         children: [
-          Container(
-            width: 60,
-            height: 60,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(15),
-              image: const DecorationImage(
-                image: NetworkImage(
-                  "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRjarPqQQhlhk1FkuQNgR9-EGuZQQth3NHKJQ&s",
-                ),
-                fit: BoxFit.cover,
-              ),
+          ClipRRect(
+            borderRadius: BorderRadius.circular(14),
+            child: Image.network(
+              "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRjarPqQQhlhk1FkuQNgR9-EGuZQQth3NHKJQ&s",
+              width: 60,
+              height: 60,
+              fit: BoxFit.cover,
             ),
           ),
           const SizedBox(width: 12),
@@ -245,15 +266,16 @@ class ListProductManagement extends StatelessWidget {
                 Text(
                   title,
                   style: const TextStyle(
-                    fontWeight: FontWeight.bold,
                     fontSize: 16,
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
+                const SizedBox(height: 4),
                 Text(
                   subtitle,
                   style: TextStyle(
-                    color: isAvailable ? Colors.grey : Colors.red,
                     fontSize: 12,
+                    color: isAvailable ? Colors.grey : Colors.red,
                   ),
                 ),
                 const SizedBox(height: 8),
@@ -261,8 +283,8 @@ class ListProductManagement extends StatelessWidget {
                   price,
                   style: const TextStyle(
                     color: Colors.orange,
-                    fontWeight: FontWeight.bold,
                     fontSize: 18,
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
               ],
@@ -271,23 +293,26 @@ class ListProductManagement extends StatelessWidget {
           Column(
             children: [
               IconButton(
-                onPressed: () {Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => UpdateProduct(
-                      initialData: {
-                        'title': title,
-                        'subtitle': subtitle,
-                        'price': price,
-                      },
-                    ),
-                  ),
-                );},
                 icon: const Icon(Icons.edit_outlined, color: Colors.blueGrey),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => UpdateProduct(
+                        initialData: {
+                          'title': title,
+                          'subtitle': subtitle,
+                          'price': price,
+                        },
+                      ),
+                    ),
+                  );
+                },
               ),
               IconButton(
+                icon: const Icon(Icons.delete_outline,
+                    color: Colors.redAccent),
                 onPressed: () {},
-                icon: const Icon(Icons.delete_outline, color: Colors.redAccent),
               ),
             ],
           ),

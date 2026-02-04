@@ -61,10 +61,10 @@ class ShopOwnerApp extends StatelessWidget {
         ),
       ),
 
-      /// 👉 GIỮ LOGIN LÀ ENTRY POINT
-      home: const LoginScreen(),
 
-      /// 👉 ROUTE KHÔNG ĐỤNG LAYOUT CŨ
+      home: const DashboardScreen(),
+
+
       routes: {
         '/login': (context) => const LoginScreen(),
         '/dashboard': (context) => const DashboardScreen(),
