@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:project/CreateProduct.dart';
-import 'package:project/UpdateProduct.dart';
 
 class VerifyOrder extends StatelessWidget {
   const VerifyOrder({super.key});
@@ -27,6 +25,45 @@ class VerifyOrder extends StatelessWidget {
         ],
         backgroundColor: Colors.white,
         elevation: 0,
+      ),
+      drawer: Drawer(
+        child: SafeArea(
+          child: ListView(
+            padding: EdgeInsets.zero,
+            children: [
+              const DrawerHeader(
+                decoration: BoxDecoration(color: Colors.white),
+                child: Text('Navigation', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+              ),
+              ListTile(
+                leading: const Icon(Icons.home),
+                title: const Text('Home'),
+                onTap: () => Navigator.pushReplacementNamed(context, '/'),
+              ),
+              ListTile(
+                leading: const Icon(Icons.article),
+                title: const Text('Blog'),
+                onTap: () => Navigator.pushNamed(context, '/blog'),
+              ),
+              ListTile(
+                leading: const Icon(Icons.notifications),
+                title: const Text('Notifications'),
+                onTap: () => Navigator.pushNamed(context, '/notifications'),
+              ),
+              ListTile(
+                leading: const Icon(Icons.payment),
+                title: const Text('Payment Status'),
+                onTap: () => Navigator.pushNamed(context, '/payment_status'),
+              ),
+              const Divider(),
+              ListTile(
+                leading: const Icon(Icons.people),
+                title: const Text('Accounts (admin)'),
+                onTap: () => Navigator.pushNamed(context, '/admin/list_accounts'),
+              ),
+            ],
+          ),
+        ),
       ),
       body: Column(
         children: [

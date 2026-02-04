@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 
 // Đừng quên file AppColors bạn đã tạo nhé!
 class OrderHistoryDesign extends StatelessWidget {
+  const OrderHistoryDesign({super.key});
+
 
   @override
   Widget build(BuildContext context) {
