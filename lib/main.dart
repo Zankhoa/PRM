@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:shop_owner_screen/CreateProduct.dart';
 import 'package:shop_owner_screen/HistoryOrderPage.dart';
 import 'package:shop_owner_screen/ListProductManagement.dart';
+import 'package:shop_owner_screen/LoginScreen.dart';
 import 'package:shop_owner_screen/VerifyOrder.dart';
 import 'package:shop_owner_screen/UpdateProduct.dart';
 import 'screens/dashboard_screen.dart';
@@ -21,7 +22,7 @@ class ShopOwnerApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Shop Owner Dashboard',
+      title: 'Food Order',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(
@@ -51,8 +52,9 @@ class ShopOwnerApp extends StatelessWidget {
           ),
         ),
       ),
-      home: const DashboardScreen(),
+      home: const LoginScreen(),
       routes: {
+        '/login': (context) => const LoginScreen(),
         '/dashboard': (context) => const DashboardScreen(),
         '/profile': (context) => const ProfileScreen(),
         '/edit-profile': (context) => const EditProfileScreen(),
