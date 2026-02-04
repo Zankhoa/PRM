@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:project/CreateProduct.dart';
-import 'package:project/UpdateProduct.dart';
+import 'package:shop_owner_screen/CreateProduct.dart';
+import 'package:shop_owner_screen/UpdateProduct.dart';
 
-class MenuManagerScreen extends StatelessWidget {
-  const MenuManagerScreen({super.key});
+class ListProductManagement extends StatelessWidget {
+  const ListProductManagement({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -127,30 +127,74 @@ class MenuManagerScreen extends StatelessWidget {
         ],
       ),
       // Thanh điều hướng dưới cùng
-      bottomNavigationBar: BottomNavigationBar(
-        type: BottomNavigationBarType.fixed,
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.grid_view_rounded),
-            label: 'Menu',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.shopping_basket_outlined),
-            label: 'Orders',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.bar_chart),
-            label: 'Reports',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.settings_outlined),
-            label: 'Settings',
+     bottomNavigationBar: _buildBottomNav(context)
+    );
+  }
+ Widget _buildBottomNav(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.white,
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.1),
+            blurRadius: 10,
+            offset: const Offset(0, -2),
           ),
         ],
+      ),
+      child: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              _buildNavItem(Icons.discount_outlined, 'Dashboard', false,
+                  () => Navigator.pushNamed(context, '/dashboard')),
+              _buildNavItem(Icons.discount_outlined, 'Đơn hàng', false,
+                  () => Navigator.pushNamed(context, '/verify-order')),
+              _buildNavItem(Icons.person_outline, 'Hồ sơ', false,
+                  () => Navigator.pushNamed(context, '/profile')),
+              _buildNavItem(Icons.person_outline, 'Quản lý sản phẩm', true,
+                  () => Navigator.pushNamed(context, '/manage-product')),
+            ],
+          ),
+        ),
       ),
     );
   }
 
+  Widget _buildNavItem(IconData icon, String label, bool isActive, VoidCallback onTap) {
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(12),
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+        decoration: BoxDecoration(
+          color: isActive ? const Color(0xFF6C63FF).withOpacity(0.1) : Colors.transparent,
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(
+              icon,
+              color: isActive ? const Color(0xFF6C63FF) : Colors.grey,
+              size: 24,
+            ),
+            const SizedBox(height: 4),
+            Text(
+              label,
+              style: TextStyle(
+                fontSize: 12,
+                color: isActive ? const Color(0xFF6C63FF) : Colors.grey,
+                fontWeight: isActive ? FontWeight.bold : FontWeight.normal,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
   Widget _buildCategoryChip(String label, {bool isSelected = false}) {
     return Container(
       margin: const EdgeInsets.only(right: 8),

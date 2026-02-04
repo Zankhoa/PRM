@@ -1,4 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:shop_owner_screen/CreateProduct.dart';
+import 'package:shop_owner_screen/HistoryOrderPage.dart';
+import 'package:shop_owner_screen/ListProductManagement.dart';
+import 'package:shop_owner_screen/VerifyOrder.dart';
+import 'package:shop_owner_screen/UpdateProduct.dart';
 import 'screens/dashboard_screen.dart';
 import 'screens/profile_screen.dart';
 import 'screens/edit_profile_screen.dart';
@@ -53,6 +58,11 @@ class ShopOwnerApp extends StatelessWidget {
         '/edit-profile': (context) => const EditProfileScreen(),
         '/discounts': (context) => const DiscountListScreen(),
         '/add-discount': (context) => const AddDiscountScreen(),
+        '/create-product': (context) => const CreateProduct(),
+        '/manage-product': (context) => const ListProductManagement(),
+        '/update-product': (context) => const UpdateProduct(),
+        '/history-order': (context) => const OrderHistory(),
+        '/verify-order': (context) => const VerifyOrder(),
       },
     );
   }
