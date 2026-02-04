@@ -178,7 +178,7 @@ class DashedBorderPainter extends CustomPainter {
 
     const double dashWidth = 6;
     const double dashSpace = 4;
-    final double radius = 20.0;
+    const double radius = 20.0;
 
     // Tạo đường Path hình chữ nhật bo góc
     final path = Path()

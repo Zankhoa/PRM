@@ -10,7 +10,6 @@ import 'screens/profile_screen.dart';
 import 'screens/edit_profile_screen.dart';
 import 'screens/discount_list_screen.dart';
 import 'screens/add_discount_screen.dart';
-import 'screens/discount_detail_screen.dart';
 
 void main() {
   runApp(const ShopOwnerApp());

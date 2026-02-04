@@ -7,8 +7,8 @@ class OrderHistory extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        leading: Icon(Icons.arrow_back_ios_new, color: Colors.black, size: 20),
-        title: Text(
+        leading: const Icon(Icons.arrow_back_ios_new, color: Colors.black, size: 20),
+        title: const Text(
           "Order History",
           style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
         ),
@@ -58,28 +58,28 @@ class OrderHistory extends StatelessWidget {
             child: ListView(
               padding: const EdgeInsets.symmetric(horizontal: 16),
               children: [
-                _buildOrderItem(
+                buildOrderItem(
                   "Starbucks Reserve",
                   "Oct 24, 10:30 AM",
                   "\$5.50",
                   "Completed",
                   Colors.green,
                 ),
-                _buildOrderItem(
+                buildOrderItem(
                   "Bubble Tea Co",
                   "Oct 22, 02:15 PM",
                   "\$6.00",
                   "Completed",
                   Colors.green,
                 ),
-                _buildOrderItem(
+                buildOrderItem(
                   "Green Leaf Tea",
                   "Oct 20, 09:45 AM",
                   "\$4.25",
                   "Cancelled",
                   Colors.red,
                 ),
-                _buildOrderItem(
+                buildOrderItem(
                   "Fruity Fresh",
                   "Oct 18, 12:00 PM",
                   "\$7.20",
@@ -92,11 +92,11 @@ class OrderHistory extends StatelessWidget {
         ],
       ),
       // Thanh điều hướng dưới cùng
-      bottomNavigationBar: _buildBottomNav(context),
+      bottomNavigationBar: buildBottomNav(context),
     );
   }
 
-  Widget _buildBottomNav(BuildContext context) {
+  Widget buildBottomNav(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
@@ -114,13 +114,13 @@ class OrderHistory extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              _buildNavItem(Icons.discount_outlined, 'Dashboard', false,
+              buildNavItem(Icons.discount_outlined, 'Dashboard', false,
                   () => Navigator.pushNamed(context, '/dashboard')),
-              _buildNavItem(Icons.discount_outlined, 'Đơn hàng', false,
+              buildNavItem(Icons.discount_outlined, 'Đơn hàng', false,
                   () => Navigator.pushNamed(context, '/verify-order')),
-              _buildNavItem(Icons.person_outline, 'Hồ sơ', false,
+              buildNavItem(Icons.person_outline, 'Hồ sơ', false,
                   () => Navigator.pushNamed(context, '/profile')),
-              _buildNavItem(Icons.person_outline, 'Quản lý sản phẩm', true,
+              buildNavItem(Icons.person_outline, 'Quản lý sản phẩm', true,
                   () => Navigator.pushNamed(context, '/manage-product')),
             ],
           ),
@@ -129,7 +129,7 @@ class OrderHistory extends StatelessWidget {
     );
   }
 
-  Widget _buildNavItem(
+  Widget buildNavItem(
       IconData icon, String label, bool isActive, VoidCallback onTap) {
     return InkWell(
       onTap: onTap,
@@ -166,7 +166,7 @@ class OrderHistory extends StatelessWidget {
   }
 
   // Widget con cho từng Item đơn hàng
-  Widget _buildOrderItem(
+  Widget buildOrderItem(
     String name,
     String date,
     String price,
