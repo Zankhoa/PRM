@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:shop_owner_screen/CreateProduct.dart';
-import 'package:shop_owner_screen/UpdateProduct.dart';
+import 'CreateProduct.dart';
+import 'UpdateProduct.dart';
 
 class ListProductManagement extends StatelessWidget {
   const ListProductManagement({super.key});

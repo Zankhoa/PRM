@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:shop_owner_screen/ListProductManagement.dart';
-import 'package:shop_owner_screen/RegisterScreen.dart';
+import 'ListProductManagement.dart';
+import 'RegisterScreen.dart';
 
 
 class LoginScreen extends StatefulWidget {

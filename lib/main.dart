@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'CreateProduct.dart';
+
+import 'LoginScreen.dart';
 import 'CreateProduct.dart';
 import 'HistoryOrderPage.dart';
 import 'ListProductManagement.dart';
@@ -7,9 +8,9 @@ import 'AdminCreateAccount.dart';
 import 'AdminListAccount.dart';
 import 'AdminUpdateAccount.dart';
 import 'BlogUser.dart';
-import 'LoginScreen.dart';
 import 'UpdateProduct.dart';
 import 'VerifyOrder.dart';
+
 import 'screens/dashboard_screen.dart';
 import 'screens/profile_screen.dart';
 import 'screens/edit_profile_screen.dart';
@@ -49,14 +50,21 @@ class ShopOwnerApp extends StatelessWidget {
         elevatedButtonTheme: ElevatedButtonThemeData(
           style: ElevatedButton.styleFrom(
             elevation: 0,
-            padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
+            padding: const EdgeInsets.symmetric(
+              horizontal: 32,
+              vertical: 16,
+            ),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(12),
             ),
           ),
         ),
       ),
+
+      /// 👉 GIỮ LOGIN LÀ ENTRY POINT
       home: const LoginScreen(),
+
+      /// 👉 ROUTE KHÔNG ĐỤNG LAYOUT CŨ
       routes: {
         '/login': (context) => const LoginScreen(),
         '/dashboard': (context) => const DashboardScreen(),
