@@ -54,13 +54,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     width: 100,
                     height: 100,
                     decoration: BoxDecoration(
-                      color: const Color(0xFF00E676).withOpacity(0.1),
+                      color: const Color(0xFF6C63FF).withOpacity(0.1),
                       shape: BoxShape.circle,
                     ),
                     child: const Icon(
                       Icons.restaurant_menu,
                       size: 50,
-                      color: Color(0xFF00E676),
+                      color: Color(0xFF6C63FF),
                     ),
                   ),
                   const SizedBox(height: 32),
@@ -269,7 +269,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               _agreeToTerms = value ?? false;
                             });
                           },
-                          activeColor: const Color(0xFF00E676),
+                          activeColor: const Color(0xFF6C63FF),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(4),
                           ),
@@ -290,7 +290,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               child: const Text(
                                 "Terms & Conditions",
                                 style: TextStyle(
-                                  color: Color(0xFF00E676),
+                                  color: Color(0xFF6C63FF),
                                   fontWeight: FontWeight.w600,
                                 ),
                               ),
@@ -325,7 +325,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       }
                     },
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFF00E676),
+                      backgroundColor: const Color(0xFF6C63FF),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12),
                       ),
@@ -409,7 +409,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         child: const Text(
                           "Login",
                           style: TextStyle(
-                            color: Color(0xFF00E676),
+                            color: Color(0xFF6C63FF),
                             fontWeight: FontWeight.bold,
                           ),
                         ),
