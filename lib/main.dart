@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
-
-import 'LoginScreen.dart';
-import 'CreateProduct.dart';
-import 'HistoryOrderPage.dart';
-import 'ListProductManagement.dart';
-import 'AdminCreateAccount.dart';
-import 'AdminListAccount.dart';
-import 'AdminUpdateAccount.dart';
-import 'BlogUser.dart';
-import 'UpdateProduct.dart';
-import 'VerifyOrder.dart';
-
+import 'package:shop_owner_screen/CreateProduct.dart';
+import 'package:shop_owner_screen/HistoryOrderPage.dart';
+import 'package:shop_owner_screen/ListProductManagement.dart';
+import 'package:shop_owner_screen/LoginScreen.dart';
+import 'package:shop_owner_screen/VerifyOrder.dart';
+import 'package:shop_owner_screen/UpdateProduct.dart';
+import 'package:shop_owner_screen/NotificationUser.dart';
+import 'package:shop_owner_screen/PaymentStatusUser.dart';
+import 'package:shop_owner_screen/AdminCreateAccount.dart';
+import 'package:shop_owner_screen/AdminListAccount.dart';
+import 'package:shop_owner_screen/AdminUpdateAccount.dart';
+import 'package:shop_owner_screen/ScreensHub.dart';
 import 'screens/dashboard_screen.dart';
 import 'screens/profile_screen.dart';
 import 'screens/edit_profile_screen.dart';
@@ -85,16 +85,13 @@ class ShopOwnerApp extends StatelessWidget {
           return UpdateProduct(initialData: args);
         },
         '/history-order': (context) => const OrderHistory(),
-        '/verify-order': (context) => const VerifyOrder(),
-        // User flow (frontend)
-        '/user-products': (context) => const ProductListUserScreen(),
-        '/user-cart': (context) => const CartUserScreen(),
-        '/user-discounts': (context) => const DiscountListUserScreen(),
-        '/user-orders': (context) => const OrderStatusUserScreen(),
-        '/user-payment': (context) {
-          final args = ModalRoute.of(context)?.settings.arguments;
-          return PaymentUserScreen();
-        },
+        '/verify': (context) => const VerifyOrder(),
+        '/screens-hub': (context) => const ScreensHub(),
+        '/notifications': (context) => const NotificationUser(),
+        '/payment_status': (context) => const PaymentStatusUser(),
+        '/admin/create_account': (context) => const AdminCreateAccount(),
+        '/admin/list_accounts': (context) => const AdminListAccount(),
+        '/admin/update_account': (context) => const AdminUpdateAccount(),
       },
     );
   }
