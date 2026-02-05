@@ -544,7 +544,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
       ),
       child: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
@@ -553,7 +553,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 () => Navigator.pushNamed(context, '/verify-order')),
               _buildNavItem(Icons.person_outline, 'Hồ sơ', false,
                 () => Navigator.pushNamed(context, '/profile')),
-               _buildNavItem(Icons.person_outline, 'Quản lý sản phẩm', false,
+                // _buildNavItem(Icons.restaurant_menu, 'Menu', false,
+              //     () => Navigator.pushNamed(context, '/user-products')),
+               _buildNavItem(Icons.person_outline, 'Sản phẩm', false,
                 () => Navigator.pushNamed(context, '/manage-product')),
             ],
           ),

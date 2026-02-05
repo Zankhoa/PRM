@@ -179,4 +179,60 @@ class MockData {
   static Product get bestSellingProduct {
     return products.reduce((a, b) => a.soldCount > b.soldCount ? a : b);
   }
+
+  /// Mock đơn hàng cho user (Order Status)
+  static List<Order> userOrders = [
+    Order(
+      id: 'ORD001',
+      items: [
+        CartItem(product: products[0], quantity: 2),
+        CartItem(product: products[1], quantity: 1),
+      ],
+      subtotal: 115000,
+      discountAmount: 23000,
+      discountCode: 'WELCOME20',
+      total: 92000,
+      status: OrderStatus.delivered,
+      createdAt: DateTime(2025, 2, 1, 10, 30),
+      address: '123 Nguyễn Huệ, Q1, TP.HCM',
+      note: 'Giao giờ trưa',
+    ),
+    Order(
+      id: 'ORD002',
+      items: [
+        CartItem(product: products[4], quantity: 3),
+        CartItem(product: products[7], quantity: 1),
+      ],
+      subtotal: 208000,
+      discountAmount: 0,
+      total: 208000,
+      status: OrderStatus.delivering,
+      createdAt: DateTime(2025, 2, 4, 14, 0),
+      address: '456 Lê Lợi, Q3, TP.HCM',
+    ),
+    Order(
+      id: 'ORD003',
+      items: [CartItem(product: products[2], quantity: 2)],
+      subtotal: 84000,
+      discountAmount: 21000,
+      discountCode: 'FLASH30',
+      total: 63000,
+      status: OrderStatus.preparing,
+      createdAt: DateTime(2025, 2, 5, 9, 15),
+      address: '789 Trần Hưng Đạo, Q5, TP.HCM',
+    ),
+    Order(
+      id: 'ORD004',
+      items: [
+        CartItem(product: products[5], quantity: 1),
+        CartItem(product: products[9], quantity: 2),
+      ],
+      subtotal: 111000,
+      discountAmount: 0,
+      total: 111000,
+      status: OrderStatus.pending,
+      createdAt: DateTime(2025, 2, 5, 11, 0),
+      address: '321 CMT8, Q10, TP.HCM',
+    ),
+  ];
 }

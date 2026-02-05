@@ -17,6 +17,12 @@ import 'screens/edit_profile_screen.dart';
 import 'screens/discount_list_screen.dart';
 import 'screens/add_discount_screen.dart';
 
+import 'user/product_list_user_screen.dart';
+import 'user/cart_user_screen.dart';
+import 'user/discount_list_user_screen.dart';
+import 'user/order_status_user_screen.dart';
+import 'user/payment_user_screen.dart';
+
 void main() {
   runApp(const ShopOwnerApp());
 }
@@ -50,14 +56,21 @@ class ShopOwnerApp extends StatelessWidget {
         elevatedButtonTheme: ElevatedButtonThemeData(
           style: ElevatedButton.styleFrom(
             elevation: 0,
-            padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
+            padding: const EdgeInsets.symmetric(
+              horizontal: 32,
+              vertical: 16,
+            ),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(12),
             ),
           ),
         ),
       ),
-      home: const LoginScreen(),
+
+
+      home: const DashboardScreen(),
+
+
       routes: {
         '/login': (context) => const LoginScreen(),
         '/dashboard': (context) => const DashboardScreen(),
@@ -67,7 +80,10 @@ class ShopOwnerApp extends StatelessWidget {
         '/add-discount': (context) => const AddDiscountScreen(),
         '/create-product': (context) => const CreateProduct(),
         '/manage-product': (context) => const ListProductManagement(),
-        '/update-product': (context) => const UpdateProduct(),
+        '/update-product': (context) {
+          final args = ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
+          return UpdateProduct(initialData: args);
+        },
         '/history-order': (context) => const OrderHistory(),
         '/verify': (context) => const VerifyOrder(),
         '/screens-hub': (context) => const ScreensHub(),

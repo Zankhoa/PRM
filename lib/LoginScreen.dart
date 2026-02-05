@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:shop_owner_screen/ListProductManagement.dart';
 import 'package:shop_owner_screen/RegisterScreen.dart';
 import 'package:shop_owner_screen/ScreensHub.dart';
+import 'ListProductManagement.dart';
+import 'RegisterScreen.dart';
 
 
 class LoginScreen extends StatefulWidget {
@@ -43,13 +45,13 @@ class _LoginScreenState extends State<LoginScreen> {
                     width: 100,
                     height: 100,
                     decoration: BoxDecoration(
-                      color: const Color(0xFF00E676).withOpacity(0.1),
+                      color: const Color(0xFF6C63FF).withOpacity(0.1),
                       shape: BoxShape.circle,
                     ),
                     child: const Icon(
                       Icons.restaurant_menu,
                       size: 50,
-                      color: Color(0xFF00E676),
+                      color: Color(0xFF6C63FF),
                     ),
                   ),
                   const SizedBox(height: 32),
@@ -172,7 +174,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       child: const Text(
                         "Forgot Password?",
                         style: TextStyle(
-                          color: Color(0xFF00E676),
+                          color: Color(0xFF6C63FF),
                           fontWeight: FontWeight.w600,
                         ),
                       ),
@@ -194,7 +196,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       }
                     },
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFF00E676),
+                      backgroundColor: const Color(0xFF6C63FF),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12),
                       ),
@@ -283,7 +285,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         child: const Text(
                           "Sign Up",
                           style: TextStyle(
-                            color: Color(0xFF00E676),
+                            color: Color(0xFF6C63FF),
                             fontWeight: FontWeight.bold,
                           ),
                         ),

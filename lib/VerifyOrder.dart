@@ -1,12 +1,118 @@
 import 'package:flutter/material.dart';
 
-class VerifyOrder extends StatelessWidget {
+// 1. DATA MODEL: Định nghĩa cấu trúc dữ liệu cho một đơn hàng
+class OrderItem {
+  final String id;
+  final String title;
+  final String subtitle;
+  final double price;
+  final String imageUrl;
+  final DateTime orderTime; // Thời gian đặt hàng để lọc
+  String status; // 'pending', 'confirmed', 'cancelled'
+
+  OrderItem({
+    required this.id,
+    required this.title,
+    required this.subtitle,
+    required this.price,
+    required this.imageUrl,
+    required this.orderTime,
+    this.status = 'pending',
+  });
+}
+
+class VerifyOrder extends StatefulWidget {
   const VerifyOrder({super.key});
+
+  @override
+  State<VerifyOrder> createState() => _VerifyOrderState();
+}
+
+class _VerifyOrderState extends State<VerifyOrder> {
+  // 2. DUMMY DATA: Tạo dữ liệu mẫu
+  List<OrderItem> allOrders = [
+    OrderItem(
+      id: '1',
+      title: "Truffle Beef Burger",
+      subtitle: "Main Course • 250g",
+      price: 18.50,
+      imageUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRjarPqQQhlhk1FkuQNgR9-EGuZQQth3NHKJQ&s",
+      orderTime: DateTime.now(), // Đơn hôm nay
+    ),
+    OrderItem(
+      id: '2',
+      title: "Classic Caesar Salad",
+      subtitle: "Starters • Healthy Choice",
+      price: 12.00,
+      imageUrl: "https://upload.wikimedia.org/wikipedia/commons/2/23/Caesar_salad_%282%29.jpg",
+      orderTime: DateTime.now().subtract(const Duration(hours: 5)), // Đơn hôm nay (sớm hơn)
+    ),
+    OrderItem(
+      id: '3',
+      title: "Spaghetti Bolognese",
+      subtitle: "Pasta • Italian",
+      price: 15.00,
+      imageUrl: "https://www.recipetineats.com/wp-content/uploads/2018/07/Spaghetti-Bolognese.jpg",
+      orderTime: DateTime.now().subtract(const Duration(days: 1)), // Đơn hôm qua
+    ),
+    OrderItem(
+      id: '4',
+      title: "Grilled Salmon",
+      subtitle: "Seafood • Fresh",
+      price: 22.50,
+      imageUrl: "https://www.dinneratthezoo.com/wp-content/uploads/2019/05/grilled-salmon-fillets-5.jpg",
+      orderTime: DateTime.now().subtract(const Duration(days: 5)), // Đơn 5 ngày trước
+    ),
+  ];
+
+  // Biến lưu trạng thái lọc hiện tại
+  String _filterType = "Tất cả"; // "Tất cả", "Hôm nay", "7 ngày qua"
+
+  // 3. LOGIC LỌC: Lấy danh sách hiển thị dựa trên bộ lọc
+  List<OrderItem> get filteredOrders {
+    final now = DateTime.now();
+    return allOrders.where((order) {
+      // Chỉ hiển thị đơn chưa xử lý (pending) để Verify
+      // Nếu bạn muốn hiện cả đơn đã xác nhận thì bỏ điều kiện status == 'pending'
+      if (order.status != 'pending') return false;
+
+      if (_filterType == "Hôm nay") {
+        return order.orderTime.year == now.year &&
+            order.orderTime.month == now.month &&
+            order.orderTime.day == now.day;
+      } else if (_filterType == "7 ngày qua") {
+        return order.orderTime.isAfter(now.subtract(const Duration(days: 7)));
+      }
+      return true; // "Tất cả"
+    }).toList();
+  }
+
+  // 4. LOGIC XÁC NHẬN
+  void _confirmOrder(OrderItem item) {
+    setState(() {
+      item.status = 'confirmed';
+      // Ở thực tế, bạn sẽ gọi API ở đây
+    });
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text("Đã xác nhận đơn: ${item.title}"), backgroundColor: Colors.green),
+    );
+  }
+
+  // 5. LOGIC HỦY
+  void _cancelOrder(OrderItem item) {
+    setState(() {
+      item.status = 'cancelled';
+      // Ở thực tế, bạn sẽ gọi API ở đây
+    });
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text("Đã hủy đơn: ${item.title}"), backgroundColor: Colors.red),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF8F9FB), // Nền xám nhạt như hình
+      backgroundColor: const Color(0xFFF8F9FB),
       appBar: AppBar(
         leading: const Icon(Icons.menu, color: Colors.black),
         title: const Text(
@@ -67,72 +173,94 @@ class VerifyOrder extends StatelessWidget {
       ),
       body: Column(
         children: [
-          // 1. Search Bar & Add Button ở trên
+          // Search Bar
           Padding(
             padding: const EdgeInsets.all(16.0),
+            child: Container(
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(12),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.05),
+                    blurRadius: 5,
+                  ),
+                ],
+              ),
+              child: const TextField(
+                decoration: InputDecoration(
+                  hintText: "Search menu items...",
+                  prefixIcon: Icon(Icons.search),
+                  border: InputBorder.none,
+                  contentPadding: EdgeInsets.symmetric(vertical: 15),
+                ),
+              ),
+            ),
+          ),
+
+          // --- PHẦN LỌC THỜI GIAN (MỚI) ---
+          SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            padding: const EdgeInsets.symmetric(horizontal: 16),
             child: Row(
               children: [
-                Expanded(
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(12),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(0.05),
-                          blurRadius: 5,
-                        ),
-                      ],
-                    ),
-                    child: const TextField(
-                      decoration: InputDecoration(
-                        hintText: "Search menu items...",
-                        prefixIcon: Icon(Icons.search),
-                        border: InputBorder.none,
-                      ),
-                    ),
-                  ),
-                ),
+                _buildFilterChip("Tất cả"),
+                const SizedBox(width: 8),
+                _buildFilterChip("Hôm nay"),
+                const SizedBox(width: 8),
+                _buildFilterChip("7 ngày qua"),
               ],
             ),
           ),
-          // 3. Menu List
+          const SizedBox(height: 10),
+
+          // List Orders
           Expanded(
-            child: ListView(
-              padding: const EdgeInsets.all(16),
-              children: [
-                _buildMenuCard(
-                  "Truffle Beef Burger",
-                  "Main Course • 250g",
-                  "\$18.50",
-                  true,
-                  context
-                ),
-                _buildMenuCard(
-                  "Classic Caesar Salad",
-                  "Starters • Healthy Choice",
-                  "\$12.00",
-                  true,
-                  context
-                ),
-                _buildMenuCard(
-                  "Classic Lime Mojito",
-                  "OUT OF STOCK",
-                  "\$8.00",
-                  false,
-                  context
-                ),
-              ],
-            ),
+            child: filteredOrders.isEmpty
+                ? Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(Icons.inbox, size: 60, color: Colors.grey[300]),
+                        const SizedBox(height: 10),
+                        Text("Không có đơn hàng nào ($getFilterText)", style: const TextStyle(color: Colors.grey)),
+                      ],
+                    ),
+                  )
+                : ListView.builder(
+                    padding: const EdgeInsets.all(16),
+                    itemCount: filteredOrders.length,
+                    itemBuilder: (context, index) {
+                      final item = filteredOrders[index];
+                      return _buildMenuCard(item, context);
+                    },
+                  ),
           ),
         ],
       ),
-      // Thanh điều hướng dưới cùng
       bottomNavigationBar: _buildBottomNav(context),
     );
   }
 
- 
+  String get getFilterText => _filterType;
+
+  // Widget hiển thị nút lọc
+  Widget _buildFilterChip(String label) {
+    bool isSelected = _filterType == label;
+    return ChoiceChip(
+      label: Text(label),
+      selected: isSelected,
+      onSelected: (bool selected) {
+        setState(() {
+          _filterType = label;
+        });
+      },
+      selectedColor: const Color(0xFF6C63FF),
+      labelStyle: TextStyle(color: isSelected ? Colors.white : Colors.black),
+      backgroundColor: Colors.white,
+    );
+  }
+
   Widget _buildBottomNav(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
@@ -151,21 +279,18 @@ class VerifyOrder extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-               _buildNavItem(Icons.discount_outlined, 'Dashboard', false, 
-                () => Navigator.pushNamed(context, '/dashboard')),
-              _buildNavItem(Icons.discount_outlined, 'Đơn hàng', true, 
-                () => Navigator.pushNamed(context, '/verify-order')),
-              _buildNavItem(Icons.person_outline, 'Hồ sơ', false,
-                () => Navigator.pushNamed(context, '/profile')),
-               _buildNavItem(Icons.person_outline, 'Quản lý sản phẩm', false,
-                () => Navigator.pushNamed(context, '/manage-product')),
+              _buildNavItem(Icons.dashboard_outlined, 'Dashboard', false, () {}),
+              _buildNavItem(Icons.shopping_bag_outlined, 'Đơn hàng', true, () {}),
+              _buildNavItem(Icons.person_outline, 'Hồ sơ', false, () {}),
+              _buildNavItem(Icons.settings_outlined, 'Quản lý', false, () {}),
             ],
           ),
         ),
       ),
     );
   }
-   Widget _buildNavItem(IconData icon, String label, bool isActive, VoidCallback onTap) {
+
+  Widget _buildNavItem(IconData icon, String label, bool isActive, VoidCallback onTap) {
     return InkWell(
       onTap: onTap,
       borderRadius: BorderRadius.circular(12),
@@ -198,13 +323,7 @@ class VerifyOrder extends StatelessWidget {
     );
   }
 
- Widget _buildMenuCard(
-    String title,
-    String subtitle,
-    String price,
-    bool isAvailable,
-    BuildContext context,
-  ) {
+  Widget _buildMenuCard(OrderItem item, BuildContext context) {
     return Container(
       margin: const EdgeInsets.only(bottom: 16),
       padding: const EdgeInsets.all(12),
@@ -220,43 +339,51 @@ class VerifyOrder extends StatelessWidget {
       ),
       child: Row(
         children: [
-          // Phần hiển thị hình ảnh
+          // Hình ảnh
           Container(
             width: 60,
             height: 60,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(15),
-              image: const DecorationImage(
-                image: NetworkImage(
-                  "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRjarPqQQhlhk1FkuQNgR9-EGuZQQth3NHKJQ&s",
-                ),
+              image: DecorationImage(
+                image: NetworkImage(item.imageUrl),
                 fit: BoxFit.cover,
+                // Handle lỗi load ảnh
+                onError: (exception, stackTrace) {},
               ),
+              color: Colors.grey[200], // Màu nền khi chưa load ảnh
             ),
           ),
           const SizedBox(width: 12),
-          // Phần thông tin sản phẩm
+          // Thông tin sản phẩm
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  title,
+                  item.title,
                   style: const TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 16,
                   ),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
                 ),
                 Text(
-                  subtitle,
-                  style: TextStyle(
-                    color: isAvailable ? Colors.grey : Colors.red,
+                  item.subtitle,
+                  style: const TextStyle(
+                    color: Colors.grey,
                     fontSize: 12,
                   ),
                 ),
-                const SizedBox(height: 8),
                 Text(
-                  price,
+                  // Hiển thị ngày giờ
+                  "${item.orderTime.hour}:${item.orderTime.minute} - ${item.orderTime.day}/${item.orderTime.month}",
+                  style: TextStyle(fontSize: 10, color: Colors.blueGrey[300]),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  "\$${item.price.toStringAsFixed(2)}",
                   style: const TextStyle(
                     color: Colors.orange,
                     fontWeight: FontWeight.bold,
@@ -266,24 +393,16 @@ class VerifyOrder extends StatelessWidget {
               ],
             ),
           ),
-          // --- THAY ĐỔI 2 ICON TẠI ĐÂY ---
+          // Nút hành động
           Column(
             children: [
-              // Icon Xác nhận (Dấu tích xanh)
               IconButton(
-                onPressed: () {
-                  // Xử lý logic xác nhận đơn hàng tại đây
-                  print("Đã xác nhận: $title");
-                },
+                onPressed: () => _confirmOrder(item),
                 icon: const Icon(Icons.check_circle_outline, color: Colors.green),
                 tooltip: "Xác nhận",
               ),
-              // Icon Hủy bỏ (Dấu X đỏ)
               IconButton(
-                onPressed: () {
-                  // Xử lý logic hủy bỏ đơn hàng tại đây
-                  print("Đã hủy bỏ: $title");
-                },
+                onPressed: () => _cancelOrder(item),
                 icon: const Icon(Icons.cancel_outlined, color: Colors.redAccent),
                 tooltip: "Hủy bỏ",
               ),
