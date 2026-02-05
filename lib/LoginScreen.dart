@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shop_owner_screen/ListProductManagement.dart';
 import 'package:shop_owner_screen/RegisterScreen.dart';
+import 'package:shop_owner_screen/ScreensHub.dart';
 
 
 class LoginScreen extends StatefulWidget {
@@ -187,7 +188,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => const ListProductManagement(),
+                            builder: (context) => const ScreensHub(),
                           ),
                         );
                       }

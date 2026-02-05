@@ -5,6 +5,12 @@ import 'package:shop_owner_screen/ListProductManagement.dart';
 import 'package:shop_owner_screen/LoginScreen.dart';
 import 'package:shop_owner_screen/VerifyOrder.dart';
 import 'package:shop_owner_screen/UpdateProduct.dart';
+import 'package:shop_owner_screen/NotificationUser.dart';
+import 'package:shop_owner_screen/PaymentStatusUser.dart';
+import 'package:shop_owner_screen/AdminCreateAccount.dart';
+import 'package:shop_owner_screen/AdminListAccount.dart';
+import 'package:shop_owner_screen/AdminUpdateAccount.dart';
+import 'package:shop_owner_screen/ScreensHub.dart';
 import 'screens/dashboard_screen.dart';
 import 'screens/profile_screen.dart';
 import 'screens/edit_profile_screen.dart';
@@ -63,7 +69,13 @@ class ShopOwnerApp extends StatelessWidget {
         '/manage-product': (context) => const ListProductManagement(),
         '/update-product': (context) => const UpdateProduct(),
         '/history-order': (context) => const OrderHistory(),
-        '/verify-order': (context) => const VerifyOrder(),
+        '/verify': (context) => const VerifyOrder(),
+        '/screens-hub': (context) => const ScreensHub(),
+        '/notifications': (context) => const NotificationUser(),
+        '/payment_status': (context) => const PaymentStatusUser(),
+        '/admin/create_account': (context) => const AdminCreateAccount(),
+        '/admin/list_accounts': (context) => const AdminListAccount(),
+        '/admin/update_account': (context) => const AdminUpdateAccount(),
       },
     );
   }
