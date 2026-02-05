@@ -63,7 +63,7 @@ class UpdateProduct extends StatelessWidget {
                                 ),
                                 child: const Icon(
                                   Icons.add_a_photo,
-                                  color: Color(0xFF00FF7F),
+                                  color: const Color(0xFF6C63FF),
                                   size: 28,
                                 ),
                               ),
@@ -127,7 +127,7 @@ class UpdateProduct extends StatelessWidget {
                       Navigator.pop(context);
                     },
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFF00FF7F),
+                      backgroundColor: const Color(0xFF6C63FF),
                       foregroundColor: Colors.white,
                       padding: const EdgeInsets.symmetric(vertical: 16),
                       elevation: 0,

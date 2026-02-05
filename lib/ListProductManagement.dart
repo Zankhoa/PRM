@@ -70,7 +70,7 @@ class ListProductManagement extends StatelessWidget {
                     );
                   },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFF00E676),
+                    backgroundColor: const Color(0xFF6C63FF),
                     padding: const EdgeInsets.all(14),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12),
@@ -224,7 +224,7 @@ class ListProductManagement extends StatelessWidget {
       child: ChoiceChip(
         label: Text(label),
         selected: selected,
-        selectedColor: const Color(0xFF00E676),
+        selectedColor: const Color(0xFF6C63FF),
         labelStyle: TextStyle(
           color: selected ? Colors.white : Colors.black,
         ),

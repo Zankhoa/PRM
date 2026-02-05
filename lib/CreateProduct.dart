@@ -55,7 +55,7 @@ class CreateProduct extends StatelessWidget {
                                   color: Colors.white,
                                   shape: BoxShape.circle,
                                 ),
-                                child: const Icon(Icons.add_a_photo, color: Color(0xFF00FF7F), size: 28),
+                                child: const Icon(Icons.add_a_photo, color: const Color(0xFF6C63FF), size: 28),
                               ),
                               const SizedBox(height: 12),
                               const Text(
@@ -108,7 +108,7 @@ class CreateProduct extends StatelessWidget {
                       // Logic lưu dữ liệu của bạn
                     },
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFF00FF7F),
+                      backgroundColor: const Color(0xFF6C63FF),
                       foregroundColor: Colors.white,
                       padding: const EdgeInsets.symmetric(vertical: 16),
                       elevation: 0,
