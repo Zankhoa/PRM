@@ -28,6 +28,8 @@ public partial class AppDbContext : DbContext
 
     public virtual DbSet<User> Users { get; set; }
 
+    public virtual DbSet<Discount> Discounts { get; set; }
+
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
         => optionsBuilder.UseSqlServer("Server=localhost;Database=FoodOrderSystem;Trusted_Connection=True;TrustServerCertificate=True;");
@@ -208,6 +210,33 @@ public partial class AppDbContext : DbContext
             entity.HasOne(d => d.Role).WithMany(p => p.Users)
                 .HasForeignKey(d => d.RoleId)
                 .HasConstraintName("FK_User_Role");
+        });
+
+        modelBuilder.Entity<Discount>(entity =>
+        {
+            entity.HasKey(e => e.DiscountId).HasName("PK__DISCOUNT__D2130A6617BF372C");
+
+            entity.ToTable("DISCOUNT");
+
+            entity.HasIndex(e => e.DiscountCode, "UQ__DISCOUNT__3D87979A0BC5A96C").IsUnique();
+
+            entity.Property(e => e.DiscountId).HasColumnName("discountId");
+            entity.Property(e => e.DiscountCode)
+                .HasMaxLength(50)
+                .IsUnicode(false)
+                .HasColumnName("discountCode");
+            entity.Property(e => e.EndDate)
+                .HasColumnType("datetime")
+                .HasColumnName("endDate");
+            entity.Property(e => e.IsActived)
+                .HasDefaultValue(true)
+                .HasColumnName("isActived");
+            entity.Property(e => e.OrderId).HasColumnName("orderId");
+            entity.Property(e => e.PercentDiscount).HasColumnName("percentDiscount");
+            entity.Property(e => e.StartDate)
+                .HasColumnType("datetime")
+                .HasColumnName("startDate");
+            entity.Property(e => e.UserId).HasColumnName("userId");
         });
 
         OnModelCreatingPartial(modelBuilder);
