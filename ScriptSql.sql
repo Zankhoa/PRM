@@ -84,3 +84,21 @@ CREATE TABLE DISCOUNT (
     CONSTRAINT FK_Discount_User FOREIGN KEY (userId) REFERENCES [USER](userId),
     CONSTRAINT FK_Discount_Order FOREIGN KEY (orderId) REFERENCES [ORDER](orderId)
 );
+
+INSERT INTO [ROLE] (roleName)
+VALUES 
+(N'Admin'),
+(N'Shop Owner'),
+(N'Customer');
+
+INSERT INTO [USER] (username, fullName, [password], phone, email, [address], roleId)
+VALUES
+('admin', N'Admin User', '123456', '0900000001', 'admin@gmail.com', N'HCM City', 1);
+
+INSERT INTO [USER] (username, fullName, [password], phone, email, [address], roleId)
+VALUES
+('owner', N'Shop Owner User', '123456', '0900000002', 'owner@gmail.com', N'HCM City', 2);
+
+INSERT INTO [USER] (username, fullName, [password], phone, email, [address], roleId)
+VALUES
+('customer', N'Customer User', '123456', '0900000003', 'customer@gmail.com', N'HCM City', 3);

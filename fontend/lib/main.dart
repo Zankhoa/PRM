@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shop_owner_screen/CreateProduct.dart';
 import 'package:shop_owner_screen/HistoryOrderPage.dart';
 import 'package:shop_owner_screen/ListProductManagement.dart';
@@ -23,12 +24,37 @@ import 'user/discount_list_user_screen.dart';
 import 'user/order_status_user_screen.dart';
 import 'user/payment_user_screen.dart';
 
-void main() {
-  runApp(const ShopOwnerApp());
+void main() async {
+  // NEW: Ensure Flutter is initialized before using SharedPreferences
+  WidgetsFlutterBinding.ensureInitialized();
+
+  // NEW: Check for saved login data
+  final prefs = await SharedPreferences.getInstance();
+  final int? roleId = prefs.getInt('roleId');
+
+  // NEW: Determine the initial screen based on the saved RoleId
+  Widget startingScreen = const LoginScreen(); // Default to login
+
+  if (roleId == 1) {
+    // Admin Role (Update this to whatever your main Admin screen is)
+    startingScreen = const AdminListAccount(); 
+  } else if (roleId == 2) {
+    // Shop Owner / User Role
+    startingScreen = const ListProductManagement();
+  } else if (roleId == 3) {
+    // User Role
+    startingScreen = const ProductListUserScreen();
+  }
+
+  // NEW: Pass the determined screen to the app
+  runApp(ShopOwnerApp(initialScreen: startingScreen));
 }
 
 class ShopOwnerApp extends StatelessWidget {
-  const ShopOwnerApp({super.key});
+  final Widget initialScreen;
+
+  // NEW: Update the constructor to require the initialScreen
+  const ShopOwnerApp({super.key, required this.initialScreen});
 
   @override
   Widget build(BuildContext context) {
@@ -68,7 +94,7 @@ class ShopOwnerApp extends StatelessWidget {
       ),
 
 
-      home: const DashboardScreen(),
+      home: initialScreen,
 
 
       routes: {

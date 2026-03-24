@@ -2,8 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:shop_owner_screen/ListProductManagement.dart';
 import 'package:shop_owner_screen/RegisterScreen.dart';
 import 'package:shop_owner_screen/ScreensHub.dart';
+import 'package:shop_owner_screen/screens/dashboard_screen.dart';
+import 'package:shop_owner_screen/user/product_list_user_screen.dart';
 import 'ListProductManagement.dart';
 import 'RegisterScreen.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+import 'package:shared_preferences/shared_preferences.dart';
 
 
 class LoginScreen extends StatefulWidget {
@@ -15,15 +20,99 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   final _formKey = GlobalKey<FormState>();
-  final _emailController = TextEditingController();
+  final _usernameController = TextEditingController(); 
   final _passwordController = TextEditingController();
   bool _obscurePassword = true;
+  bool _isLoading = false;
 
   @override
   void dispose() {
-    _emailController.dispose();
+    _usernameController.dispose();
     _passwordController.dispose();
     super.dispose();
+  }
+
+  Future<void> _login() async {
+    if (!_formKey.currentState!.validate()) return;
+
+    setState(() {
+      _isLoading = true; // Start loading spinner
+    });
+
+    try {
+      // NOTE: Use 10.0.2.2 instead of localhost if testing on an Android Emulator.
+      // If testing on a physical device, use your computer's local IP address (e.g., 192.168.1.x)
+      final url = Uri.parse('http://localhost:5089/api/Auth/login'); 
+
+      final response = await http.post(
+        url,
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({
+          'username': _usernameController.text.trim(),
+          'password': _passwordController.text.trim(),
+        }),
+      );
+
+      final data = jsonDecode(response.body);
+
+      if (response.statusCode == 200 && data['success'] == true) {
+        // 1. Extract the user data
+        final int roleId = data['user']['roleId'];
+        final int userId = data['user']['userId'];
+        final String username = data['user']['username'];
+
+        // 2. Save to SharedPreferences
+        final prefs = await SharedPreferences.getInstance();
+        await prefs.setInt('userId', userId);
+        await prefs.setInt('roleId', roleId);
+        await prefs.setString('username', username);
+
+        if (mounted) {
+          // 3. Route them based on their RoleId
+          if (roleId == 1) {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (context) => const DashboardScreen()), 
+            );
+          } else if (roleId == 2) {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (context) => const ListProductManagement()),
+            );
+          } else if (roleId == 3){
+            Navigator.pushReplacement(context, 
+            MaterialPageRoute(builder: (context) => const ProductListUserScreen())
+            );
+          }
+        }
+      } else {
+        // Failed! Show error message from the API
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(data['message'] ?? 'Login failed.'),
+              backgroundColor: Colors.red,
+            ),
+          );
+        }
+      }
+    } catch (e) {
+      // Network error or server is down
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Could not connect to the server: $e'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+    } finally {
+      if (mounted) {
+        setState(() {
+          _isLoading = false; // Stop loading spinner
+        });
+      }
+    }
   }
 
   @override
@@ -90,7 +179,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       ],
                     ),
                     child: TextFormField(
-                      controller: _emailController,
+                      controller: _usernameController,
                       keyboardType: TextInputType.emailAddress,
                       decoration: const InputDecoration(
                         hintText: "Email",
@@ -103,10 +192,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
-                          return 'Please enter your email';
-                        }
-                        if (!value.contains('@')) {
-                          return 'Please enter a valid email';
+                          return 'Please enter your username';
                         }
                         return null;
                       },
@@ -184,17 +270,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
                   // Login Button
                   ElevatedButton(
-                    onPressed: () {
-                      if (_formKey.currentState!.validate()) {
-                        // Handle login
-                        Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const ScreensHub(),
-                          ),
-                        );
-                      }
-                    },
+                    onPressed: _isLoading ? null : _login, // Disable button while loading
                     style: ElevatedButton.styleFrom(
                       backgroundColor: const Color(0xFF6C63FF),
                       shape: RoundedRectangleBorder(
@@ -203,14 +279,23 @@ class _LoginScreenState extends State<LoginScreen> {
                       padding: const EdgeInsets.symmetric(vertical: 16),
                       elevation: 0,
                     ),
-                    child: const Text(
-                      "Login",
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                      ),
-                    ),
+                    child: _isLoading
+                        ? const SizedBox(
+                            height: 20,
+                            width: 20,
+                            child: CircularProgressIndicator(
+                              color: Colors.white,
+                              strokeWidth: 2,
+                            ),
+                          )
+                        : const Text(
+                            "Login",
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                            ),
+                          ),
                   ),
                   const SizedBox(height: 24),
 
