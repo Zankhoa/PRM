@@ -71,3 +71,16 @@ CREATE TABLE PAYMENT (
     createdAt DATETIME DEFAULT GETDATE(),
     CONSTRAINT FK_Payment_Order FOREIGN KEY (orderId) REFERENCES [ORDER](orderId)
 );
+--7 bảng discount 
+CREATE TABLE DISCOUNT (
+    discountId INT IDENTITY(1,1) PRIMARY KEY,
+    userId INT, -- Người dùng sở hữu/được áp dụng mã giảm giá
+    discountCode VARCHAR(50) NOT NULL UNIQUE,
+    startDate DATETIME,
+    percentDiscount int, 
+    endDate DATETIME,
+    isActived BIT DEFAULT 1,
+    orderId INT, 
+    CONSTRAINT FK_Discount_User FOREIGN KEY (userId) REFERENCES [USER](userId),
+    CONSTRAINT FK_Discount_Order FOREIGN KEY (orderId) REFERENCES [ORDER](orderId)
+);
