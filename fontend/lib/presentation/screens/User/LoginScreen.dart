@@ -1,12 +1,16 @@
-import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:shop_owner_screen/presentation/screens/ShopOwner/list_product_management_screen.dart';
-import 'package:shop_owner_screen/presentation/screens/User/product_list_user_screen.dart';
-import 'package:shop_owner_screen/presentation/screens/User/user_main_shell_screen.dart';
-import 'RegisterScreen.dart';
-import 'package:http/http.dart' as http;
 import 'dart:convert';
 
+import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:shop_owner_screen/data/api_config.dart';
+import 'package:shop_owner_screen/data/service/api_http_helpers.dart';
+import 'package:shop_owner_screen/data/service/json_response_helper.dart';
+import 'package:shop_owner_screen/presentation/screens/Admin/list_accounts_screen.dart';
+import 'package:shop_owner_screen/presentation/screens/ShopOwner/dashboard.dart';
+import 'package:shop_owner_screen/presentation/screens/User/user_main_shell_screen.dart';
+
+import 'RegisterScreen.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -17,7 +21,7 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   final _formKey = GlobalKey<FormState>();
-  final _usernameController = TextEditingController(); 
+  final _usernameController = TextEditingController();
   final _passwordController = TextEditingController();
   bool _obscurePassword = true;
   bool _isLoading = false;
@@ -32,15 +36,10 @@ class _LoginScreenState extends State<LoginScreen> {
   Future<void> _login() async {
     if (!_formKey.currentState!.validate()) return;
 
-    setState(() {
-      _isLoading = true; // Start loading spinner
-    });
+    setState(() => _isLoading = true);
 
     try {
-      // NOTE: Use 10.0.2.2 instead of localhost if testing on an Android Emulator.
-      // If testing on a physical device, use your computer's local IP address (e.g., 192.168.1.x)
-      final url = Uri.parse('https://localhost:7008/api/Auth/login'); 
-
+      final url = Uri.parse('${ApiConfig.baseUrl}/api/Auth/login');
       final response = await http.post(
         url,
         headers: {'Content-Type': 'application/json'},
@@ -50,66 +49,81 @@ class _LoginScreenState extends State<LoginScreen> {
         }),
       );
 
-      final data = jsonDecode(response.body);
+      final data = tryDecodeJsonObject(response.body);
 
-      if (response.statusCode == 200 && data['success'] == true) {
-        // 1. Extract the user data
-        final int roleId = data['user']['roleId'];
-        final int userId = data['user']['userId'];
-        final String username = data['user']['username'];
+      if (response.statusCode == 200 && data?['success'] == true) {
+        final user = data?['user'] as Map<String, dynamic>;
+        final int? roleId = user['roleId'] as int?;
+        final String? roleName = user['roleName'] as String?;
+        final int userId = user['userId'] as int;
+        final String username = user['username'] as String;
 
-        // 2. Save to SharedPreferences
         final prefs = await SharedPreferences.getInstance();
         await prefs.setInt('userId', userId);
-        await prefs.setInt('roleId', roleId);
+        if (roleId != null) {
+          await prefs.setInt('roleId', roleId);
+        }
+        if (roleName != null && roleName.isNotEmpty) {
+          await prefs.setString('roleName', roleName);
+        }
         await prefs.setString('username', username);
 
-        if (mounted) {
-          // 3. Route them based on their RoleId
-          if (roleId == 1) {
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(builder: (context) => const UserMainShellScreen(userId: 1)), 
-            );
-          } else if (roleId == 2) {
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(builder: (context) => ListProductManagementScreen(userId: userId!)),
-            );
-          } else if (roleId == 3){
-            Navigator.pushReplacement(context, 
-            MaterialPageRoute(builder: (context) => ProductListUserScreen(userId: userId!, onCartChanged: () {}))
-            );
-          }
-        }
-      } else {
-        // Failed! Show error message from the API
-        if (mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(data['message'] ?? 'Login failed.'),
-              backgroundColor: Colors.red,
-            ),
+        if (!mounted) return;
+
+        if (_isAdmin(roleId, roleName)) {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => const ListAccountsScreen()),
+          );
+        } else if (_isShopOwner(roleId, roleName)) {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+                builder: (context) => DashboardScreen(userId: userId)),
+          );
+        } else {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+                builder: (context) => UserMainShellScreen(userId: userId)),
           );
         }
-      }
-    } catch (e) {
-      // Network error or server is down
-      if (mounted) {
+      } else {
+        if (!mounted) return;
+        final message = data?['message']?.toString() ??
+            formatApiException(response, 'Login failed');
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Could not connect to the server: $e'),
+            content: Text(message),
             backgroundColor: Colors.red,
           ),
         );
       }
+    } catch (e) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Could not connect to the server: $e'),
+          backgroundColor: Colors.red,
+        ),
+      );
     } finally {
       if (mounted) {
-        setState(() {
-          _isLoading = false; // Stop loading spinner
-        });
+        setState(() => _isLoading = false);
       }
     }
+  }
+
+  bool _isAdmin(int? roleId, String? roleName) {
+    final key = (roleName ?? '').toLowerCase();
+    if (key.contains('admin')) return true;
+    return roleId == 1 && key.isEmpty;
+  }
+
+  bool _isShopOwner(int? roleId, String? roleName) {
+    final key = (roleName ?? '').toLowerCase();
+    if (key.contains('shop')) return true;
+    return roleId == 2 && key.isEmpty;
   }
 
   @override
@@ -126,7 +140,6 @@ class _LoginScreenState extends State<LoginScreen> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  // Logo/Icon
                   Container(
                     width: 100,
                     height: 100,
@@ -141,10 +154,8 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                   ),
                   const SizedBox(height: 32),
-
-                  // Welcome Text
                   const Text(
-                    "Welcome Back!",
+                    'Welcome Back!',
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontSize: 28,
@@ -154,7 +165,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                   const SizedBox(height: 8),
                   const Text(
-                    "Sign in to continue",
+                    'Sign in to continue',
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontSize: 16,
@@ -162,8 +173,6 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                   ),
                   const SizedBox(height: 40),
-
-                  // Email Field
                   Container(
                     decoration: BoxDecoration(
                       color: Colors.white,
@@ -179,13 +188,12 @@ class _LoginScreenState extends State<LoginScreen> {
                       controller: _usernameController,
                       keyboardType: TextInputType.emailAddress,
                       decoration: const InputDecoration(
-                        hintText: "Email",
-                        prefixIcon: Icon(Icons.email_outlined, color: Colors.grey),
+                        hintText: 'Email',
+                        prefixIcon:
+                            Icon(Icons.email_outlined, color: Colors.grey),
                         border: InputBorder.none,
-                        contentPadding: EdgeInsets.symmetric(
-                          horizontal: 16,
-                          vertical: 16,
-                        ),
+                        contentPadding:
+                            EdgeInsets.symmetric(horizontal: 16, vertical: 16),
                       ),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
@@ -196,8 +204,6 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                   ),
                   const SizedBox(height: 16),
-
-                  // Password Field
                   Container(
                     decoration: BoxDecoration(
                       color: Colors.white,
@@ -213,8 +219,9 @@ class _LoginScreenState extends State<LoginScreen> {
                       controller: _passwordController,
                       obscureText: _obscurePassword,
                       decoration: InputDecoration(
-                        hintText: "Password",
-                        prefixIcon: const Icon(Icons.lock_outline, color: Colors.grey),
+                        hintText: 'Password',
+                        prefixIcon:
+                            const Icon(Icons.lock_outline, color: Colors.grey),
                         suffixIcon: IconButton(
                           icon: Icon(
                             _obscurePassword
@@ -223,16 +230,13 @@ class _LoginScreenState extends State<LoginScreen> {
                             color: Colors.grey,
                           ),
                           onPressed: () {
-                            setState(() {
-                              _obscurePassword = !_obscurePassword;
-                            });
+                            setState(
+                                () => _obscurePassword = !_obscurePassword);
                           },
                         ),
                         border: InputBorder.none,
                         contentPadding: const EdgeInsets.symmetric(
-                          horizontal: 16,
-                          vertical: 16,
-                        ),
+                            horizontal: 16, vertical: 16),
                       ),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
@@ -246,16 +250,12 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                   ),
                   const SizedBox(height: 12),
-
-                  // Forgot Password
                   Align(
                     alignment: Alignment.centerRight,
                     child: TextButton(
-                      onPressed: () {
-                        // Handle forgot password
-                      },
+                      onPressed: () {},
                       child: const Text(
-                        "Forgot Password?",
+                        'Forgot Password?',
                         style: TextStyle(
                           color: Color(0xFF6C63FF),
                           fontWeight: FontWeight.w600,
@@ -264,10 +264,8 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                   ),
                   const SizedBox(height: 24),
-
-                  // Login Button
                   ElevatedButton(
-                    onPressed: _isLoading ? null : _login, // Disable button while loading
+                    onPressed: _isLoading ? null : _login,
                     style: ElevatedButton.styleFrom(
                       backgroundColor: const Color(0xFF6C63FF),
                       shape: RoundedRectangleBorder(
@@ -281,57 +279,42 @@ class _LoginScreenState extends State<LoginScreen> {
                             height: 20,
                             width: 20,
                             child: CircularProgressIndicator(
-                              color: Colors.white,
-                              strokeWidth: 2,
-                            ),
+                                color: Colors.white, strokeWidth: 2),
                           )
                         : const Text(
-                            "Login",
+                            'Login',
                             style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white,
-                            ),
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white),
                           ),
                   ),
                   const SizedBox(height: 24),
-
-                  // OR Divider
                   Row(
                     children: [
                       Expanded(
-                        child: Divider(
-                          thickness: 1,
-                          color: Colors.grey.shade300,
-                        ),
-                      ),
+                          child: Divider(
+                              thickness: 1, color: Colors.grey.shade300)),
                       const Padding(
                         padding: EdgeInsets.symmetric(horizontal: 16),
                         child: Text(
-                          "OR",
+                          'OR',
                           style: TextStyle(
-                            color: Colors.grey,
-                            fontWeight: FontWeight.w600,
-                          ),
+                              color: Colors.grey, fontWeight: FontWeight.w600),
                         ),
                       ),
                       Expanded(
-                        child: Divider(
-                          thickness: 1,
-                          color: Colors.grey.shade300,
-                        ),
-                      ),
+                          child: Divider(
+                              thickness: 1, color: Colors.grey.shade300)),
                     ],
                   ),
                   const SizedBox(height: 24),
-
-                  // Social Login Buttons
                   Row(
                     children: [
                       Expanded(
                         child: _buildSocialButton(
                           icon: Icons.g_mobiledata,
-                          label: "Google",
+                          label: 'Google',
                           onPressed: () {},
                         ),
                       ),
@@ -339,20 +322,18 @@ class _LoginScreenState extends State<LoginScreen> {
                       Expanded(
                         child: _buildSocialButton(
                           icon: Icons.facebook,
-                          label: "Facebook",
+                          label: 'Facebook',
                           onPressed: () {},
                         ),
                       ),
                     ],
                   ),
                   const SizedBox(height: 32),
-
-                  // Sign Up Link
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       const Text(
-                        "Don't have an account? ",
+                        'Don\'t have an account? ',
                         style: TextStyle(color: Colors.grey),
                       ),
                       TextButton(
@@ -360,12 +341,11 @@ class _LoginScreenState extends State<LoginScreen> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => const RegisterScreen(),
-                            ),
+                                builder: (context) => const RegisterScreen()),
                           );
                         },
                         child: const Text(
-                          "Sign Up",
+                          'Sign Up',
                           style: TextStyle(
                             color: Color(0xFF6C63FF),
                             fontWeight: FontWeight.bold,
@@ -391,10 +371,7 @@ class _LoginScreenState extends State<LoginScreen> {
     return OutlinedButton.icon(
       onPressed: onPressed,
       icon: Icon(icon, color: Colors.black),
-      label: Text(
-        label,
-        style: const TextStyle(color: Colors.black),
-      ),
+      label: Text(label, style: const TextStyle(color: Colors.black)),
       style: OutlinedButton.styleFrom(
         backgroundColor: Colors.white,
         side: BorderSide(color: Colors.grey.shade300),

@@ -18,7 +18,7 @@ public class PaymentsController : ControllerBase
     public async Task<IActionResult> GetPaymentStatus(int userId, int orderId)
     {
         var payment = await _db.Payments.AsNoTracking()
-            .Where(p => p.OrderId == orderId)
+            .Where(p => p.OrderId == orderId && p.Order != null && p.Order.UserId == userId)
             .Select(p => new { p.PaymentId, p.Status, p.PaymentMethod, p.Amount, p.CreatedAt })
             .FirstOrDefaultAsync();
         if (payment == null) return NotFound(new { message = "Payment not found." });

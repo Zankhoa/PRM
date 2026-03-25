@@ -5,6 +5,7 @@ import 'package:shop_owner_screen/presentation/screens/User/SettingScreen.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:shop_owner_screen/data/api_config.dart';
 
 class UserProfileScreen extends StatefulWidget {
   const UserProfileScreen({super.key});
@@ -23,7 +24,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
     super.initState();
     _fetchUserProfile();
   }
-  
+
   Future<void> _fetchUserProfile() async {
     setState(() {
       _isLoading = true;
@@ -44,7 +45,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
       }
 
       // 2. Call the API (Make sure to use localhost for Chrome, or 10.0.2.2 for Emulator)
-      final url = Uri.parse('https://localhost:7008/api/UserProfile/$userId');
+      final url = Uri.parse('${ApiConfig.baseUrl}/api/UserProfile/$userId');
       final response = await http.get(url);
 
       if (response.statusCode == 200) {
@@ -123,7 +124,8 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
       ),
       // NEW: Show a loading spinner, an error, or the actual profile
       body: _isLoading
-          ? const Center(child: CircularProgressIndicator(color: Color(0xFF6C63FF)))
+          ? const Center(
+              child: CircularProgressIndicator(color: Color(0xFF6C63FF)))
           : _errorMessage.isNotEmpty
               ? Center(
                   child: Text(
@@ -200,7 +202,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                           color: Colors.grey.shade600,
                         ),
                       ),
-                      
+
                       // NEW: Dynamic Phone (Optional Addition based on your API)
                       if (_userData?['phone'] != null) ...[
                         const SizedBox(height: 4),
