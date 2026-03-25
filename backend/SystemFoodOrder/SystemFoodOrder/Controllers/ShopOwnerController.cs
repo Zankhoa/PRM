@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System.Linq;
 using SystemFoodOrder.Data;
 using SystemFoodOrder.Model.DTOs;
 using SystemFoodOrder.Service;
@@ -48,9 +47,9 @@ namespace SystemFoodOrder.Controllers
 
             var orderDetails = await _context.OrderDetails
                 .Include(od => od.Order)
-                .Where(od => productIds.Contains(od.ProductId) &&
-                             od.Order != null &&
-                             od.Order.Status != "Cancelled")
+                .Where(od => productIds.Contains(od.ProductId ?? 0) &&
+                            od.Order != null &&
+                            od.Order.Status != "Cancelled")
                 .ToListAsync();
 
             var salesData = products.Select(p => new ProductSalesDTO
@@ -59,8 +58,12 @@ namespace SystemFoodOrder.Controllers
                 ProductName = p.Name,
                 Category = p.Category,
                 Price = p.Price,
-                SoldCount = orderDetails.Where(od => od.ProductId == p.ProductId).Sum(od => od.Quantity),
-                Revenue = orderDetails.Where(od => od.ProductId == p.ProductId).Sum(od => od.Price * od.Quantity)
+                SoldCount = orderDetails
+                    .Where(od => od.ProductId == p.ProductId)
+                    .Sum(od => od.Quantity),
+                Revenue = orderDetails
+                    .Where(od => od.ProductId == p.ProductId)
+                    .Sum(od => od.Price * od.Quantity)
             })
             .OrderByDescending(p => p.SoldCount)
             .ToList();
@@ -103,7 +106,7 @@ namespace SystemFoodOrder.Controllers
                     Email = u.Email,
                     Address = u.Address,
                     AvatarUser = u.AvatarUser,
-                    CreatedAt = u.CreatedAt ?? DateTime.Now
+                    CreatedAt = u.CreatedAt
                 })
                 .FirstOrDefaultAsync();
 
