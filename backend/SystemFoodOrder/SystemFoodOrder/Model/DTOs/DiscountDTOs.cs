@@ -9,8 +9,10 @@
         public DateTime? EndDate { get; set; }
         public int? PercentDiscount { get; set; }
         public bool? IsActived { get; set; }
+
+        // Computed properties
         public bool IsExpired => EndDate.HasValue && EndDate.Value < DateTime.Now;
-        public bool? IsActive => IsActived && !IsExpired;
+        public bool IsActive => (IsActived ?? false) && !IsExpired;
     }
 
     // DTO cho màn hình Add Discount
@@ -62,7 +64,7 @@
         public string? Email { get; set; }
         public string? Address { get; set; }
         public string? AvatarUser { get; set; }
-        public DateTime CreatedAt { get; set; }
+        public DateTime? CreatedAt { get; set; }
     }
 
     // DTO cho Update Profile
