@@ -34,7 +34,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
 
       if (_userId == null) return;
 
-      final url = Uri.parse('http://localhost:5089/api/User/$_userId');
+      final url = Uri.parse('http://localhost:5089/api/UserProfile/$_userId');
       final response = await http.get(url);
 
       if (response.statusCode == 200) {
@@ -71,7 +71,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
     });
 
     try {
-      final url = Uri.parse('http://localhost:5089/api/User/$_userId');
+      final url = Uri.parse('http://localhost:5089/api/UserProfile/$_userId');
       
       final response = await http.put(
         url,

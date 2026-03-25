@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:shop_owner_screen/UserProfileScreen.dart';
 import '../models/models.dart';
 import '../models/mock_data.dart';
 import 'cart_state.dart';
@@ -145,6 +146,15 @@ class _ProductListUserScreenState extends State<ProductListUserScreen> {
           IconButton(
             icon: const Icon(Icons.receipt_long_outlined),
             onPressed: () => Navigator.pushNamed(context, '/user-orders'),
+          ),
+          IconButton(
+            icon: const Icon(Icons.person_outline),
+            onPressed: () => Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const UserProfileScreen(),
+              ),
+            ),
           ),
           Stack(
             clipBehavior: Clip.none,

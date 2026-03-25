@@ -4,15 +4,7 @@ using SystemFoodOrder.Data;
 var builder = WebApplication.CreateBuilder(args);
 
 //register appdbcontext 
-builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"),
-    sqlServerOptionsAction: sqlOptions =>
-    {
-        // This tells EF Core to automatically retry if the database blips
-        sqlOptions.EnableRetryOnFailure(
-            maxRetryCount: 5, // Default is normally 6
-            maxRetryDelay: TimeSpan.FromSeconds(30),
-            errorNumbersToAdd: null);
-    }));
+builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAll", policy =>

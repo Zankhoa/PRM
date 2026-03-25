@@ -44,7 +44,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
       }
 
       // 2. Call the API (Make sure to use localhost for Chrome, or 10.0.2.2 for Emulator)
-      final url = Uri.parse('http://localhost:5089/api/User/$userId');
+      final url = Uri.parse('http://localhost:5089/api/UserProfile/$userId');
       final response = await http.get(url);
 
       if (response.statusCode == 200) {
