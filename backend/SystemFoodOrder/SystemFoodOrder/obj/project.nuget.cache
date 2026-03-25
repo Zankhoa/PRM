@@ -1,8 +1,14 @@
 {
   "version": 2,
+<<<<<<< HEAD
   "dgSpecHash": "VTI1V8+0egY=",
   "success": true,
   "projectFilePath": "C:\\Users\\ADMIN\\OneDrive\\Documents\\A.Katori\\SP26\\PRM393\\PRM\\backend\\SystemFoodOrder\\SystemFoodOrder\\SystemFoodOrder.csproj",
+=======
+  "dgSpecHash": "AFEiCUSPy0c=",
+  "success": true,
+  "projectFilePath": "D:\\final\\backup\\PRM\\backend\\SystemFoodOrder\\SystemFoodOrder\\SystemFoodOrder.csproj",
+>>>>>>> 476b436f21a7f246f4db173c29b6d7e9892ca7a2
   "expectedPackageFiles": [
     "C:\\Users\\ADMIN\\.nuget\\packages\\azure.core\\1.38.0\\azure.core.1.38.0.nupkg.sha512",
     "C:\\Users\\ADMIN\\.nuget\\packages\\azure.identity\\1.11.4\\azure.identity.1.11.4.nupkg.sha512",

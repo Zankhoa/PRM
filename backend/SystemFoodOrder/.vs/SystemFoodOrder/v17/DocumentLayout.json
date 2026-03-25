@@ -1,5 +1,6 @@
 {
   "Version": 1,
+<<<<<<< HEAD
   "WorkspaceRootPath": "C:\\Users\\ADMIN\\OneDrive\\Documents\\A.Katori\\SP26\\PRM393\\PRM\\backend\\SystemFoodOrder\\",
   "Documents": [
     {
@@ -45,6 +46,25 @@
     {
       "AbsoluteMoniker": "D:0:0:{FE8D5F18-E0C5-4BBB-8035-5E6F1FE8CAA2}|SystemFoodOrder\\SystemFoodOrder.csproj|c:\\users\\admin\\onedrive\\documents\\a.katori\\sp26\\prm393\\prm\\backend\\systemfoodorder\\systemfoodorder\\service\\userservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{FE8D5F18-E0C5-4BBB-8035-5E6F1FE8CAA2}|SystemFoodOrder\\SystemFoodOrder.csproj|solutionrelative:systemfoodorder\\service\\userservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+=======
+  "WorkspaceRootPath": "D:\\final\\backup\\PRM\\backend\\SystemFoodOrder\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{FE8D5F18-E0C5-4BBB-8035-5E6F1FE8CAA2}|SystemFoodOrder\\SystemFoodOrder.csproj|d:\\final\\backup\\prm\\backend\\systemfoodorder\\systemfoodorder\\model\\dtos\\discountdtos.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{FE8D5F18-E0C5-4BBB-8035-5E6F1FE8CAA2}|SystemFoodOrder\\SystemFoodOrder.csproj|solutionrelative:systemfoodorder\\model\\dtos\\discountdtos.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{FE8D5F18-E0C5-4BBB-8035-5E6F1FE8CAA2}|SystemFoodOrder\\SystemFoodOrder.csproj|d:\\final\\backup\\prm\\backend\\systemfoodorder\\systemfoodorder\\service\\discountservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{FE8D5F18-E0C5-4BBB-8035-5E6F1FE8CAA2}|SystemFoodOrder\\SystemFoodOrder.csproj|solutionrelative:systemfoodorder\\service\\discountservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{FE8D5F18-E0C5-4BBB-8035-5E6F1FE8CAA2}|SystemFoodOrder\\SystemFoodOrder.csproj|d:\\final\\backup\\prm\\backend\\systemfoodorder\\systemfoodorder\\controllers\\discountscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{FE8D5F18-E0C5-4BBB-8035-5E6F1FE8CAA2}|SystemFoodOrder\\SystemFoodOrder.csproj|solutionrelative:systemfoodorder\\controllers\\discountscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{FE8D5F18-E0C5-4BBB-8035-5E6F1FE8CAA2}|SystemFoodOrder\\SystemFoodOrder.csproj|d:\\final\\backup\\prm\\backend\\systemfoodorder\\systemfoodorder\\model\\dtos\\userflowdtos.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{FE8D5F18-E0C5-4BBB-8035-5E6F1FE8CAA2}|SystemFoodOrder\\SystemFoodOrder.csproj|solutionrelative:systemfoodorder\\model\\dtos\\userflowdtos.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+>>>>>>> 476b436f21a7f246f4db173c29b6d7e9892ca7a2
     }
   ],
   "DocumentGroupContainers": [
@@ -54,6 +74,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
+<<<<<<< HEAD
           "SelectedChildIndex": 216,
           "Children": [
             {
@@ -67,10 +88,26 @@
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-03-25T18:16:03.251Z",
+=======
+          "SelectedChildIndex": 0,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "DiscountDTOs.cs",
+              "DocumentMoniker": "D:\\final\\backup\\PRM\\backend\\SystemFoodOrder\\SystemFoodOrder\\Model\\DTOs\\DiscountDTOs.cs",
+              "RelativeDocumentMoniker": "SystemFoodOrder\\Model\\DTOs\\DiscountDTOs.cs",
+              "ToolTip": "D:\\final\\backup\\PRM\\backend\\SystemFoodOrder\\SystemFoodOrder\\Model\\DTOs\\DiscountDTOs.cs",
+              "RelativeToolTip": "SystemFoodOrder\\Model\\DTOs\\DiscountDTOs.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAAFAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-25T18:00:45.116Z",
+>>>>>>> 476b436f21a7f246f4db173c29b6d7e9892ca7a2
               "EditorCaption": ""
             },
             {
               "$type": "Document",
+<<<<<<< HEAD
               "DocumentIndex": 2,
               "Title": "CartItem.cs",
               "DocumentMoniker": "C:\\Users\\ADMIN\\OneDrive\\Documents\\A.Katori\\SP26\\PRM393\\PRM\\backend\\SystemFoodOrder\\SystemFoodOrder\\Model\\Entities\\CartItem.cs",
@@ -80,12 +117,24 @@
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-03-25T18:16:02.197Z",
+=======
+              "DocumentIndex": 1,
+              "Title": "DiscountService.cs",
+              "DocumentMoniker": "D:\\final\\backup\\PRM\\backend\\SystemFoodOrder\\SystemFoodOrder\\Service\\DiscountService.cs",
+              "RelativeDocumentMoniker": "SystemFoodOrder\\Service\\DiscountService.cs",
+              "ToolTip": "D:\\final\\backup\\PRM\\backend\\SystemFoodOrder\\SystemFoodOrder\\Service\\DiscountService.cs",
+              "RelativeToolTip": "SystemFoodOrder\\Service\\DiscountService.cs",
+              "ViewState": "AgIAAJMAAAAAAAAAAAArwKQAAAAtAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-25T18:00:36.748Z",
+>>>>>>> 476b436f21a7f246f4db173c29b6d7e9892ca7a2
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 3,
               "Title": "UserFlowDtos.cs",
+<<<<<<< HEAD
               "DocumentMoniker": "C:\\Users\\ADMIN\\OneDrive\\Documents\\A.Katori\\SP26\\PRM393\\PRM\\backend\\SystemFoodOrder\\SystemFoodOrder\\Model\\DTOs\\UserFlowDtos.cs",
               "RelativeDocumentMoniker": "SystemFoodOrder\\Model\\DTOs\\UserFlowDtos.cs",
               "ToolTip": "C:\\Users\\ADMIN\\OneDrive\\Documents\\A.Katori\\SP26\\PRM393\\PRM\\backend\\SystemFoodOrder\\SystemFoodOrder\\Model\\DTOs\\UserFlowDtos.cs",
@@ -120,6 +169,20 @@
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-03-25T18:15:57.268Z",
               "EditorCaption": ""
+=======
+              "DocumentMoniker": "D:\\final\\backup\\PRM\\backend\\SystemFoodOrder\\SystemFoodOrder\\Model\\DTOs\\UserFlowDtos.cs",
+              "RelativeDocumentMoniker": "SystemFoodOrder\\Model\\DTOs\\UserFlowDtos.cs",
+              "ToolTip": "D:\\final\\backup\\PRM\\backend\\SystemFoodOrder\\SystemFoodOrder\\Model\\DTOs\\UserFlowDtos.cs",
+              "RelativeToolTip": "SystemFoodOrder\\Model\\DTOs\\UserFlowDtos.cs",
+              "ViewState": "AgIAABUAAAAAAAAAAAA4wBMAAAAOAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-25T17:59:10.885Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:8:0:{e8034f19-ab72-4f06-83fd-f6832b41aa63}"
+>>>>>>> 476b436f21a7f246f4db173c29b6d7e9892ca7a2
             },
             {
               "$type": "Bookmark",
@@ -976,6 +1039,7 @@
             },
             {
               "$type": "Document",
+<<<<<<< HEAD
               "DocumentIndex": 0,
               "Title": "DiscountDTOs.cs",
               "DocumentMoniker": "C:\\Users\\ADMIN\\OneDrive\\Documents\\A.Katori\\SP26\\PRM393\\PRM\\backend\\SystemFoodOrder\\SystemFoodOrder\\Model\\DTOs\\DiscountDTOs.cs",
@@ -1037,6 +1101,18 @@
               "ViewState": "AgIAABIAAAAAAAAAAAAYwAcAAAAcAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-03-25T13:53:32.354Z"
+=======
+              "DocumentIndex": 2,
+              "Title": "DiscountsController.cs",
+              "DocumentMoniker": "D:\\final\\backup\\PRM\\backend\\SystemFoodOrder\\SystemFoodOrder\\Controllers\\DiscountsController.cs",
+              "RelativeDocumentMoniker": "SystemFoodOrder\\Controllers\\DiscountsController.cs",
+              "ToolTip": "D:\\final\\backup\\PRM\\backend\\SystemFoodOrder\\SystemFoodOrder\\Controllers\\DiscountsController.cs",
+              "RelativeToolTip": "SystemFoodOrder\\Controllers\\DiscountsController.cs",
+              "ViewState": "AgIAAB4AAAAAAAAAAAAQwCgAAAArAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-25T17:57:42.719Z",
+              "EditorCaption": ""
+>>>>>>> 476b436f21a7f246f4db173c29b6d7e9892ca7a2
             }
           ]
         },
@@ -1099,10 +1175,6 @@
             {
               "$type": "Bookmark",
               "Name": "ST:0:0:{d78612c7-9962-4b83-95d9-268046dad23a}"
-            },
-            {
-              "$type": "Bookmark",
-              "Name": "ST:0:0:{1c4feeaa-4718-4aa9-859d-94ce25d182ba}"
             }
           ]
         },
