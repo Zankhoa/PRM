@@ -1,13 +1,14 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "D:\\work\\testFinalAssigmentSemester8\\PRM\\backend\\SystemFoodOrder\\",
+  "WorkspaceRootPath": "D:\\final\\backup\\PRM\\backend\\SystemFoodOrder\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{FE8D5F18-E0C5-4BBB-8035-5E6F1FE8CAA2}|SystemFoodOrder\\SystemFoodOrder.csproj|d:\\work\\testfinalassigmentsemester8\\prm\\backend\\systemfoodorder\\systemfoodorder\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{FE8D5F18-E0C5-4BBB-8035-5E6F1FE8CAA2}|SystemFoodOrder\\SystemFoodOrder.csproj|solutionrelative:systemfoodorder\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{FE8D5F18-E0C5-4BBB-8035-5E6F1FE8CAA2}|SystemFoodOrder\\SystemFoodOrder.csproj|d:\\final\\backup\\prm\\backend\\systemfoodorder\\systemfoodorder\\controllers\\userscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{FE8D5F18-E0C5-4BBB-8035-5E6F1FE8CAA2}|SystemFoodOrder\\SystemFoodOrder.csproj|solutionrelative:systemfoodorder\\controllers\\userscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|D:\\final\\merger\\PRM\\backend\\SystemFoodOrder\\SystemFoodOrder\\Program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{FE8D5F18-E0C5-4BBB-8035-5E6F1FE8CAA2}|SystemFoodOrder\\SystemFoodOrder.csproj|d:\\final\\backup\\prm\\backend\\systemfoodorder\\systemfoodorder\\service\\userservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{FE8D5F18-E0C5-4BBB-8035-5E6F1FE8CAA2}|SystemFoodOrder\\SystemFoodOrder.csproj|solutionrelative:systemfoodorder\\service\\userservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -17,7 +18,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 21,
+          "SelectedChildIndex": 20,
           "Children": [
             {
               "$type": "Bookmark",
@@ -101,29 +102,28 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "Program.cs",
-              "DocumentMoniker": "D:\\final\\merger\\PRM\\backend\\SystemFoodOrder\\SystemFoodOrder\\Program.cs",
-              "RelativeDocumentMoniker": "..\\..\\..\\..\\..\\final\\merger\\PRM\\backend\\SystemFoodOrder\\SystemFoodOrder\\Program.cs",
-              "ToolTip": "D:\\final\\merger\\PRM\\backend\\SystemFoodOrder\\SystemFoodOrder\\Program.cs",
-              "RelativeToolTip": "..\\..\\..\\..\\..\\final\\merger\\PRM\\backend\\SystemFoodOrder\\SystemFoodOrder\\Program.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABMAAAAAAAAAAAAAAA==",
+              "DocumentIndex": 0,
+              "Title": "UsersController.cs",
+              "DocumentMoniker": "D:\\final\\backup\\PRM\\backend\\SystemFoodOrder\\SystemFoodOrder\\Controllers\\UsersController.cs",
+              "RelativeDocumentMoniker": "SystemFoodOrder\\Controllers\\UsersController.cs",
+              "ToolTip": "D:\\final\\backup\\PRM\\backend\\SystemFoodOrder\\SystemFoodOrder\\Controllers\\UsersController.cs",
+              "RelativeToolTip": "SystemFoodOrder\\Controllers\\UsersController.cs",
+              "ViewState": "AgIAAAMAAAAAAAAAAAAkwBMAAAAJAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-03-25T13:48:59.207Z",
+              "WhenOpened": "2026-03-25T13:54:15.037Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "Program.cs",
-              "DocumentMoniker": "D:\\work\\testFinalAssigmentSemester8\\PRM\\backend\\SystemFoodOrder\\SystemFoodOrder\\Program.cs",
-              "RelativeDocumentMoniker": "SystemFoodOrder\\Program.cs",
-              "ToolTip": "D:\\work\\testFinalAssigmentSemester8\\PRM\\backend\\SystemFoodOrder\\SystemFoodOrder\\Program.cs",
-              "RelativeToolTip": "SystemFoodOrder\\Program.cs",
-              "ViewState": "AgIAABEAAAAAAAAAAAAAACUAAAADAAAAAAAAAA==",
+              "DocumentIndex": 1,
+              "Title": "UserService.cs",
+              "DocumentMoniker": "D:\\final\\backup\\PRM\\backend\\SystemFoodOrder\\SystemFoodOrder\\Service\\UserService.cs",
+              "RelativeDocumentMoniker": "SystemFoodOrder\\Service\\UserService.cs",
+              "ToolTip": "D:\\final\\backup\\PRM\\backend\\SystemFoodOrder\\SystemFoodOrder\\Service\\UserService.cs",
+              "RelativeToolTip": "SystemFoodOrder\\Service\\UserService.cs",
+              "ViewState": "AgIAABIAAAAAAAAAAAAYwAcAAAAcAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-03-25T13:45:47.911Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-03-25T13:53:32.354Z"
             }
           ]
         },
@@ -142,10 +142,6 @@
             {
               "$type": "Bookmark",
               "Name": "ST:0:0:{d78612c7-9962-4b83-95d9-268046dad23a}"
-            },
-            {
-              "$type": "Bookmark",
-              "Name": "ST:0:0:{1c4feeaa-4718-4aa9-859d-94ce25d182ba}"
             }
           ]
         }

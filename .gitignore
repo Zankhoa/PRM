@@ -44,7 +44,7 @@ app.*.map.json
 /android/app/profile
 /android/app/release
 
-# ASP.NET Core / .NET
+# ASP.NET Core / .NET / Visual Studio
 **/bin/
 **/obj/
 *.user
@@ -53,3 +53,4 @@ app.*.map.json
 *.exe
 *.pdb
 *.swae.build.ex.cache
+.vs/

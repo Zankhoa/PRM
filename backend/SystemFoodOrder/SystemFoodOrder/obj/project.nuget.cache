@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "4IjwbhOXxR8=",
+  "dgSpecHash": "AFEiCUSPy0c=",
   "success": true,
-  "projectFilePath": "D:\\work\\testFinalAssigmentSemester8\\PRM\\backend\\SystemFoodOrder\\SystemFoodOrder\\SystemFoodOrder.csproj",
+  "projectFilePath": "D:\\final\\backup\\PRM\\backend\\SystemFoodOrder\\SystemFoodOrder\\SystemFoodOrder.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Admin\\.nuget\\packages\\azure.core\\1.38.0\\azure.core.1.38.0.nupkg.sha512",
     "C:\\Users\\Admin\\.nuget\\packages\\azure.identity\\1.11.4\\azure.identity.1.11.4.nupkg.sha512",
