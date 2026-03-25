@@ -22,6 +22,9 @@ public partial class AppDbContext : DbContext
 
     public virtual DbSet<Payment> Payments { get; set; }
 
+    public virtual DbSet<Blog> Blogs { get; set; }
+    public virtual DbSet<Notification> Notifications { get; set; }
+
     public virtual DbSet<Product> Products { get; set; }
     public virtual DbSet<CartItem> CartItems { get; set; }
     public virtual DbSet<Discount> Discounts { get; set; }
@@ -30,8 +33,17 @@ public partial class AppDbContext : DbContext
     public virtual DbSet<User> Users { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    {
+        // If the DbContext is configured via DI (AddDbContext in Program.cs), don't override the options.
+        if (optionsBuilder.IsConfigured)
+        {
+            return;
+        }
+
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseSqlServer("Server=localhost;Database=FoodOrderSystem;Trusted_Connection=True;TrustServerCertificate=True;");
+        // Fallback connection string for design-time or when DI is not used. Match user's SQLEXPRESS instance.
+        optionsBuilder.UseSqlServer("Server=localhost\\SQLEXPRESS;Database=FoodOrderSystem;Trusted_Connection=True;TrustServerCertificate=True;");
+    }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -63,6 +75,30 @@ public partial class AppDbContext : DbContext
             entity.HasOne(d => d.User).WithMany(p => p.Orders)
                 .HasForeignKey(d => d.UserId)
                 .HasConstraintName("FK_Order_User");
+        });
+        modelBuilder.Entity<Blog>(entity =>
+        {
+            entity.HasKey(e => e.BlogId).HasName("PK__BLOG__");
+            entity.ToTable("BLOG");
+            entity.Property(e => e.BlogId).HasColumnName("blogId");
+            entity.Property(e => e.UserId).HasColumnName("userId");
+            entity.Property(e => e.Title).HasMaxLength(500).HasColumnName("title");
+            entity.Property(e => e.Content).HasColumnName("content");
+            entity.Property(e => e.CreatedAt).HasColumnType("datetime").HasColumnName("createdAt");
+            entity.HasOne(d => d.User).WithMany().HasForeignKey(d => d.UserId).HasConstraintName("FK_Blog_User");
+        });
+
+        modelBuilder.Entity<Notification>(entity =>
+        {
+            entity.HasKey(e => e.NotificationId).HasName("PK__NOTIFICATION__");
+            entity.ToTable("NOTIFICATION");
+            entity.Property(e => e.NotificationId).HasColumnName("notificationId");
+            entity.Property(e => e.UserId).HasColumnName("userId");
+            entity.Property(e => e.Title).HasMaxLength(500).HasColumnName("title");
+            entity.Property(e => e.Message).HasColumnName("message");
+            entity.Property(e => e.IsRead).HasColumnName("isRead");
+            entity.Property(e => e.CreatedAt).HasColumnType("datetime").HasColumnName("createdAt");
+            entity.HasOne(d => d.User).WithMany().HasForeignKey(d => d.UserId).HasConstraintName("FK_Notification_User");
         });
 
         modelBuilder.Entity<OrderDetail>(entity =>
