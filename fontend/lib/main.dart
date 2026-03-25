@@ -1,22 +1,61 @@
 import 'package:flutter/material.dart';
-import 'package:shop_owner_screen/app/demo_user_config.dart';
+import 'package:shop_owner_screen/presentation/screens/ShopOwner/list_product_management_screen.dart';
+import 'package:shop_owner_screen/presentation/screens/User/order_history_screen.dart';
 import 'package:shop_owner_screen/presentation/screens/User/user_main_shell_screen.dart';
-import 'package:shop_owner_screen/presentation/theme/food_order_ui.dart';
+// import 'package:shop_owner_screen/presentation/screens/User/order_history_screen.dart';
+
 
 void main() {
-  runApp(const FoodOrderApp());
+  runApp(const ShopOwnerApp());
 }
 
-class FoodOrderApp extends StatelessWidget {
-  const FoodOrderApp({super.key});
+class ShopOwnerApp extends StatelessWidget {
+  const ShopOwnerApp({super.key});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Food Order',
       debugShowCheckedModeBanner: false,
-      theme: FoodOrderUi.themeData(),
-      home: const UserMainShellScreen(userId: DemoUserConfig.userId),
+      
+      // Giữ nguyên phần Theme của bạn vì nó setup màu sắc và font chữ rất chuẩn
+      theme: ThemeData(
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: const Color(0xFF6C63FF),
+          brightness: Brightness.light,
+        ),
+        useMaterial3: true,
+        fontFamily: 'Poppins',
+        appBarTheme: const AppBarTheme(
+          centerTitle: true,
+          elevation: 0,
+          backgroundColor: Colors.transparent,
+        ),
+        cardTheme: CardThemeData(
+          elevation: 0,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
+          ),
+        ),
+        elevatedButtonTheme: ElevatedButtonThemeData(
+          style: ElevatedButton.styleFrom(
+            elevation: 0,
+            padding: const EdgeInsets.symmetric(
+              horizontal: 32,
+              vertical: 16,
+            ),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+            ),
+          ),
+        ),
+      ),
+
+      // THAY ĐỔI CỐT LÕI Ở ĐÂY:
+      // Gắn trực tiếp màn hình OrderHistoryScreen và truyền cứng userId = 1 để test API
+      home: const UserMainShellScreen(userId: 1), // Thay bằng ListProductManagementScreen() để
+
+      // Đã xóa toàn bộ thuộc tính 'routes:' để app không bị vướng bận các màn hình khác
     );
   }
 }

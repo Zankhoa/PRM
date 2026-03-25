@@ -1,15 +1,28 @@
+﻿using Microsoft.EntityFrameworkCore;
 using System.Text.Json;
-using Microsoft.EntityFrameworkCore;
 using SystemFoodOrder.Data;
 using SystemFoodOrder.Infrastructure;
+using SystemFoodOrder.Service;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+// 1. CẤU HÌNH CORS (Bắt buộc cho Flutter Web)
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowFlutterWeb",
+        policy =>
+        {
+            policy.AllowAnyOrigin()
+                  .AllowAnyHeader()
+                  .AllowAnyMethod();
+        });
+});
 
-builder.Services.AddScoped<SystemFoodOrder.Service.OrderService>();
-builder.Services.AddScoped<SystemFoodOrder.Service.UserService>();
+//register appdbcontext 
+builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+builder.Services.AddScoped<ProductManageService>();
+builder.Services.AddScoped<UserService>();
+builder.Services.AddScoped<OrderService>();
 builder.Services.AddScoped<SystemFoodOrder.Service.ProductService>();
 builder.Services.AddScoped<SystemFoodOrder.Service.CartService>();
 builder.Services.AddScoped<SystemFoodOrder.Service.CheckoutService>();
@@ -17,6 +30,7 @@ builder.Services.AddScoped<SystemFoodOrder.Service.DiscountService>();
 builder.Services.AddScoped<SystemFoodOrder.Service.OrderQueryService>();
 builder.Services.AddScoped<SystemFoodOrder.Service.ShopOrderService>();
 
+// Add services to the container.
 builder.Services.AddControllers().AddJsonOptions(o =>
 {
     o.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
@@ -24,7 +38,6 @@ builder.Services.AddControllers().AddJsonOptions(o =>
 });
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-
 builder.Services.AddCors(options =>
 {
     options.AddDefaultPolicy(policy =>
@@ -34,7 +47,6 @@ builder.Services.AddCors(options =>
 });
 
 var app = builder.Build();
-
 try
 {
     await using (var scope = app.Services.CreateAsyncScope())
@@ -48,16 +60,18 @@ catch (Exception ex)
     Console.WriteLine($"[Bootstrap] {ex.Message}");
 }
 
+// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
 
-if (!app.Environment.IsDevelopment())
-    app.UseHttpsRedirection();
+app.UseHttpsRedirection();
+app.UseCors("AllowFlutterWeb");
 
-app.UseCors();
 app.UseAuthorization();
+
 app.MapControllers();
+
 app.Run();

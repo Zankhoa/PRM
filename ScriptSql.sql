@@ -84,3 +84,13 @@ CREATE TABLE DISCOUNT (
     CONSTRAINT FK_Discount_User FOREIGN KEY (userId) REFERENCES [USER](userId),
     CONSTRAINT FK_Discount_Order FOREIGN KEY (orderId) REFERENCES [ORDER](orderId)
 );
+  CREATE TABLE CART_ITEM (
+        cartItemId INT IDENTITY(1,1) PRIMARY KEY,
+        userId INT NOT NULL,
+        productId INT NOT NULL,
+        quantity INT NOT NULL CHECK (quantity > 0),
+        updatedAt DATETIME DEFAULT GETDATE(),
+        CONSTRAINT FK_CartItem_User FOREIGN KEY (userId) REFERENCES [USER](userId) ON DELETE CASCADE,
+        CONSTRAINT FK_CartItem_Product FOREIGN KEY (productId) REFERENCES PRODUCT(productId),
+        CONSTRAINT UQ_CartItem_User_Product UNIQUE (userId, productId)
+    );

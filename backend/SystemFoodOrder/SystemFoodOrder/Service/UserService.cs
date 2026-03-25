@@ -1,3 +1,4 @@
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SystemFoodOrder.Data;
 using SystemFoodOrder.Model.DTOs;
@@ -15,10 +16,7 @@ namespace SystemFoodOrder.Service
         }
         public async Task<List<OrderHistoryDTOs>> GetOrderHistoryByUserId(int userId, DateTime? startDate, DateTime? endDate, int page = 1, int pageSize = 20)
         {
-            var query = _context.Orders.AsNoTracking()
-                .Include(o => o.OrderDetails)
-                .ThenInclude(d => d.Product)
-                .Where(x => x.UserId == userId);
+            var query = _context.Orders.Where(x => x.UserId == userId);
             if (startDate.HasValue)
             {
                 query = query.Where(x => x.CreatedAt >= startDate.Value);
@@ -36,7 +34,7 @@ namespace SystemFoodOrder.Service
                 .SelectMany(order => order.OrderDetails, (order, detailt) => new OrderHistoryDTOs
                 {
                     OrderId = order.OrderId,
-                    NameProducts = detailt.Product != null ? detailt.Product.Name : "",
+                    NameProducts = detailt.Product.Name,
                     TotalPrice = order.TotalPrice,
                     Status = order.Status,
                     CreatedAt = order.CreatedAt,

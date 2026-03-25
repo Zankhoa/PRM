@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 
 namespace SystemFoodOrder.Model.Entities;
@@ -30,8 +30,6 @@ public partial class User
     public virtual ICollection<Order> Orders { get; set; } = new List<Order>();
 
     public virtual ICollection<Product> Products { get; set; } = new List<Product>();
-
-    public virtual ICollection<CartItem> CartItems { get; set; } = new List<CartItem>();
 
     public virtual Role? Role { get; set; }
 }

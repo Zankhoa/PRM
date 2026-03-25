@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using SystemFoodOrder.Model.Entities;
@@ -23,14 +23,15 @@ public partial class AppDbContext : DbContext
     public virtual DbSet<Payment> Payments { get; set; }
 
     public virtual DbSet<Product> Products { get; set; }
-
+    public virtual DbSet<CartItem> CartItems { get; set; }
+    public virtual DbSet<Discount> Discounts { get; set; }
     public virtual DbSet<Role> Roles { get; set; }
 
     public virtual DbSet<User> Users { get; set; }
 
-    public virtual DbSet<Discount> Discounts { get; set; }
-
-    public virtual DbSet<CartItem> CartItems { get; set; }
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
+        => optionsBuilder.UseSqlServer("Server=localhost;Database=FoodOrderSystem;Trusted_Connection=True;TrustServerCertificate=True;");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -149,7 +150,6 @@ public partial class AppDbContext : DbContext
                 .HasForeignKey(d => d.UserId)
                 .HasConstraintName("FK_Product_User");
         });
-
         modelBuilder.Entity<CartItem>(entity =>
         {
             entity.HasKey(e => e.CartItemId).HasName("PK_CART_ITEM");
@@ -162,13 +162,13 @@ public partial class AppDbContext : DbContext
             entity.Property(e => e.Quantity).HasColumnName("quantity");
             entity.Property(e => e.UpdatedAt).HasColumnName("updatedAt");
 
-            entity.HasOne(d => d.User).WithMany(p => p.CartItems)
-                .HasForeignKey(d => d.UserId)
-                .OnDelete(DeleteBehavior.Cascade);
+            //entity.HasOne(d => d.User).WithMany(p => p.CartItems)
+            //    .HasForeignKey(d => d.UserId)
+            //    .OnDelete(DeleteBehavior.Cascade);
 
-            entity.HasOne(d => d.Product).WithMany(p => p.CartItems)
-                .HasForeignKey(d => d.ProductId)
-                .OnDelete(DeleteBehavior.Cascade);
+            //entity.HasOne(d => d.Product).WithMany(p => p.CartItems)
+            //    .HasForeignKey(d => d.ProductId)
+            //    .OnDelete(DeleteBehavior.Cascade);
 
             entity.HasIndex(e => new { e.UserId, e.ProductId }).IsUnique();
         });
@@ -232,7 +232,6 @@ public partial class AppDbContext : DbContext
                 .HasForeignKey(d => d.RoleId)
                 .HasConstraintName("FK_User_Role");
         });
-
         modelBuilder.Entity<Discount>(entity =>
         {
             entity.HasKey(e => e.DiscountId).HasName("PK__DISCOUNT__D2130A6617BF372C");
@@ -262,6 +261,8 @@ public partial class AppDbContext : DbContext
 
         OnModelCreatingPartial(modelBuilder);
     }
+
+
 
     partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
 }

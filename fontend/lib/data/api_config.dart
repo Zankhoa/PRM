@@ -13,8 +13,8 @@ class ApiConfig {
   static String get baseUrl {
     if (_fromEnv.isNotEmpty) return _fromEnv;
     if (!kIsWeb && defaultTargetPlatform == TargetPlatform.android) {
-      return 'http://10.0.2.2:5089';
+      return 'https://localhost:7008';
     }
-    return 'http://localhost:5089';
+    return 'https://localhost:7008';
   }
 }
