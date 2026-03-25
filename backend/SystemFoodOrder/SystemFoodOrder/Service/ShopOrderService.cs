@@ -70,6 +70,15 @@ public class ShopOrderService
         return o == null ? null : OrderStatusMapper.ToDto(o);
     }
 
+    public async Task<bool?> UpdateOrderStatusConfirm(int orderId, string newStatus)
+    {
+        var data = _context.Orders.Where(x => x.OrderId == orderId).FirstOrDefaultAsync();
+        var result = await _context.SaveChangesAsync();
+        return true;
+
+
+    }
+
     private static readonly HashSet<string> AllowedStatuses =
         new(StringComparer.OrdinalIgnoreCase) { "Confirmed", "Cancelled" };
 }

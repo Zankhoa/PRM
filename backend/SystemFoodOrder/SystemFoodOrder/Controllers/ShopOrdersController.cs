@@ -47,4 +47,10 @@ public class ShopOrdersController : ControllerBase
             return BadRequest(new { message = ex.Message });
         }
     }
+
+    //public async Task<IActionResult> UpdateStatus(int orderId, [FromBody] ShopUpdateOrderStatusRequest body)
+    //{
+    //    var dto = await _shopOrderService.Up(orderId, body.Status);
+    //    return Ok();
+    //}
 }
