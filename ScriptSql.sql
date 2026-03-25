@@ -84,21 +84,13 @@ CREATE TABLE DISCOUNT (
     CONSTRAINT FK_Discount_User FOREIGN KEY (userId) REFERENCES [USER](userId),
     CONSTRAINT FK_Discount_Order FOREIGN KEY (orderId) REFERENCES [ORDER](orderId)
 );
-
-INSERT INTO [ROLE] (roleName)
-VALUES 
-(N'Admin'),
-(N'Shop Owner'),
-(N'Customer');
-
-INSERT INTO [USER] (username, fullName, [password], phone, email, [address], roleId)
-VALUES
-('admin', N'Admin User', '123456', '0900000001', 'admin@gmail.com', N'HCM City', 1);
-
-INSERT INTO [USER] (username, fullName, [password], phone, email, [address], roleId)
-VALUES
-('owner', N'Shop Owner User', '123456', '0900000002', 'owner@gmail.com', N'HCM City', 2);
-
-INSERT INTO [USER] (username, fullName, [password], phone, email, [address], roleId)
-VALUES
-('customer', N'Customer User', '123456', '0900000003', 'customer@gmail.com', N'HCM City', 3);
+  CREATE TABLE CART_ITEM (
+        cartItemId INT IDENTITY(1,1) PRIMARY KEY,
+        userId INT NOT NULL,
+        productId INT NOT NULL,
+        quantity INT NOT NULL CHECK (quantity > 0),
+        updatedAt DATETIME DEFAULT GETDATE(),
+        CONSTRAINT FK_CartItem_User FOREIGN KEY (userId) REFERENCES [USER](userId) ON DELETE CASCADE,
+        CONSTRAINT FK_CartItem_Product FOREIGN KEY (productId) REFERENCES PRODUCT(productId),
+        CONSTRAINT UQ_CartItem_User_Product UNIQUE (userId, productId)
+    );

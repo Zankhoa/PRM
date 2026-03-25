@@ -1,28 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:shop_owner_screen/CreateProduct.dart';
-import 'package:shop_owner_screen/HistoryOrderPage.dart';
-import 'package:shop_owner_screen/ListProductManagement.dart';
-import 'package:shop_owner_screen/LoginScreen.dart';
-import 'package:shop_owner_screen/VerifyOrder.dart';
-import 'package:shop_owner_screen/UpdateProduct.dart';
-import 'package:shop_owner_screen/NotificationUser.dart';
-import 'package:shop_owner_screen/PaymentStatusUser.dart';
-import 'package:shop_owner_screen/AdminCreateAccount.dart';
-import 'package:shop_owner_screen/AdminListAccount.dart';
-import 'package:shop_owner_screen/AdminUpdateAccount.dart';
-import 'package:shop_owner_screen/ScreensHub.dart';
-import 'screens/dashboard_screen.dart';
-import 'screens/profile_screen.dart';
-import 'screens/edit_profile_screen.dart';
-import 'screens/discount_list_screen.dart';
-import 'screens/add_discount_screen.dart';
+import 'package:shop_owner_screen/presentation/screens/ShopOwner/list_product_management_screen.dart';
+import 'package:shop_owner_screen/presentation/screens/User/LoginScreen.dart';
+import 'package:shop_owner_screen/presentation/screens/User/order_history_screen.dart';
+import 'package:shop_owner_screen/presentation/screens/User/product_list_user_screen.dart';
+import 'package:shop_owner_screen/presentation/screens/User/user_main_shell_screen.dart';
 
-import 'user/product_list_user_screen.dart';
-import 'user/cart_user_screen.dart';
-import 'user/discount_list_user_screen.dart';
-import 'user/order_status_user_screen.dart';
-import 'user/payment_user_screen.dart';
+// import 'package:shop_owner_screen/presentation/screens/User/order_history_screen.dart';
 
 void main() async {
   // NEW: Ensure Flutter is initialized before using SharedPreferences
@@ -32,18 +16,24 @@ void main() async {
   final prefs = await SharedPreferences.getInstance();
   final int? roleId = prefs.getInt('roleId');
 
+  final int? userId = prefs.getInt('userId');
+
   // NEW: Determine the initial screen based on the saved RoleId
   Widget startingScreen = const LoginScreen(); // Default to login
 
-  if (roleId == 1) {
-    // Admin Role (Update this to whatever your main Admin screen is)
-    startingScreen = const AdminListAccount(); 
-  } else if (roleId == 2) {
-    // Shop Owner / User Role
-    startingScreen = const ListProductManagement();
-  } else if (roleId == 3) {
-    // User Role
-    startingScreen = const ProductListUserScreen();
+  if (roleId != null && userId != null) {
+    if (roleId == 1) {
+      // 1. Removed 'const' 
+      // 2. Added '!' to tell Dart it is definitely not null
+      startingScreen = const UserMainShellScreen(userId: 1); 
+    } else if (roleId == 2) {
+      startingScreen = ListProductManagementScreen(userId: userId!);
+    } else if (roleId == 3) {
+      startingScreen = ProductListUserScreen(
+        userId: userId!, 
+        onCartChanged: () {},
+      );
+    }
   }
 
   // NEW: Pass the determined screen to the app
@@ -92,33 +82,7 @@ class ShopOwnerApp extends StatelessWidget {
           ),
         ),
       ),
-
-
       home: initialScreen,
-
-
-      routes: {
-        '/login': (context) => const LoginScreen(),
-        '/dashboard': (context) => const DashboardScreen(),
-        '/profile': (context) => const ProfileScreen(),
-        '/edit-profile': (context) => const EditProfileScreen(),
-        '/discounts': (context) => const DiscountListScreen(),
-        '/add-discount': (context) => const AddDiscountScreen(),
-        '/create-product': (context) => const CreateProduct(),
-        '/manage-product': (context) => const ListProductManagement(),
-        '/update-product': (context) {
-          final args = ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
-          return UpdateProduct(initialData: args);
-        },
-        '/history-order': (context) => const OrderHistory(),
-        '/verify': (context) => const VerifyOrder(),
-        '/screens-hub': (context) => const ScreensHub(),
-        '/notifications': (context) => const NotificationUser(),
-        '/payment_status': (context) => const PaymentStatusUser(),
-        '/admin/create_account': (context) => const AdminCreateAccount(),
-        '/admin/list_accounts': (context) => const AdminListAccount(),
-        '/admin/update_account': (context) => const AdminUpdateAccount(),
-      },
     );
   }
 }

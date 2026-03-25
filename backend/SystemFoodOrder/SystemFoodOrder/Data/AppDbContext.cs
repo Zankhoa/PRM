@@ -23,7 +23,8 @@ public partial class AppDbContext : DbContext
     public virtual DbSet<Payment> Payments { get; set; }
 
     public virtual DbSet<Product> Products { get; set; }
-
+    public virtual DbSet<CartItem> CartItems { get; set; }
+    public virtual DbSet<Discount> Discounts { get; set; }
     public virtual DbSet<Role> Roles { get; set; }
 
     public virtual DbSet<User> Users { get; set; }
@@ -155,6 +156,28 @@ public partial class AppDbContext : DbContext
                 .HasForeignKey(d => d.UserId)
                 .HasConstraintName("FK_Product_User");
         });
+        modelBuilder.Entity<CartItem>(entity =>
+        {
+            entity.HasKey(e => e.CartItemId).HasName("PK_CART_ITEM");
+
+            entity.ToTable("CART_ITEM");
+
+            entity.Property(e => e.CartItemId).HasColumnName("cartItemId");
+            entity.Property(e => e.UserId).HasColumnName("userId");
+            entity.Property(e => e.ProductId).HasColumnName("productId");
+            entity.Property(e => e.Quantity).HasColumnName("quantity");
+            entity.Property(e => e.UpdatedAt).HasColumnName("updatedAt");
+
+            //entity.HasOne(d => d.User).WithMany(p => p.CartItems)
+            //    .HasForeignKey(d => d.UserId)
+            //    .OnDelete(DeleteBehavior.Cascade);
+
+            //entity.HasOne(d => d.Product).WithMany(p => p.CartItems)
+            //    .HasForeignKey(d => d.ProductId)
+            //    .OnDelete(DeleteBehavior.Cascade);
+
+            entity.HasIndex(e => new { e.UserId, e.ProductId }).IsUnique();
+        });
 
         modelBuilder.Entity<Role>(entity =>
         {
@@ -215,9 +238,37 @@ public partial class AppDbContext : DbContext
                 .HasForeignKey(d => d.RoleId)
                 .HasConstraintName("FK_User_Role");
         });
+        modelBuilder.Entity<Discount>(entity =>
+        {
+            entity.HasKey(e => e.DiscountId).HasName("PK__DISCOUNT__D2130A6617BF372C");
+
+            entity.ToTable("DISCOUNT");
+
+            entity.HasIndex(e => e.DiscountCode, "UQ__DISCOUNT__3D87979A0BC5A96C").IsUnique();
+
+            entity.Property(e => e.DiscountId).HasColumnName("discountId");
+            entity.Property(e => e.DiscountCode)
+                .HasMaxLength(50)
+                .IsUnicode(false)
+                .HasColumnName("discountCode");
+            entity.Property(e => e.EndDate)
+                .HasColumnType("datetime")
+                .HasColumnName("endDate");
+            entity.Property(e => e.IsActived)
+                .HasDefaultValue(true)
+                .HasColumnName("isActived");
+            entity.Property(e => e.OrderId).HasColumnName("orderId");
+            entity.Property(e => e.PercentDiscount).HasColumnName("percentDiscount");
+            entity.Property(e => e.StartDate)
+                .HasColumnType("datetime")
+                .HasColumnName("startDate");
+            entity.Property(e => e.UserId).HasColumnName("userId");
+        });
 
         OnModelCreatingPartial(modelBuilder);
     }
+
+
 
     partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
 }

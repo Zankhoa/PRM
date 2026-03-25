@@ -144,3 +144,4 @@ D:\work\testFinalAssigmentSemester8\PRM\backend\SystemFoodOrder\SystemFoodOrder\
 D:\work\testFinalAssigmentSemester8\PRM\backend\SystemFoodOrder\SystemFoodOrder\obj\Debug\net8.0\SystemFoodOrder.pdb
 D:\work\testFinalAssigmentSemester8\PRM\backend\SystemFoodOrder\SystemFoodOrder\obj\Debug\net8.0\SystemFoodOrder.genruntimeconfig.cache
 D:\work\testFinalAssigmentSemester8\PRM\backend\SystemFoodOrder\SystemFoodOrder\obj\Debug\net8.0\ref\SystemFoodOrder.dll
+D:\work\testFinalAssigmentSemester8\PRM\backend\SystemFoodOrder\SystemFoodOrder\obj\Debug\net8.0\staticwebassets.upToDateCheck.txt
