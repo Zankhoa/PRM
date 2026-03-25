@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shop_owner_screen/presentation/screens/ShopOwner/list_product_management_screen.dart';
 // import 'package:shop_owner_screen/presentation/screens/User/order_history_screen.dart';
+import 'package:shop_owner_screen/presentation/screens/ShopOwner/discount/list_discount.dart';
 
 
 void main() {
@@ -51,8 +52,8 @@ class ShopOwnerApp extends StatelessWidget {
 
       // THAY ĐỔI CỐT LÕI Ở ĐÂY:
       // Gắn trực tiếp màn hình OrderHistoryScreen và truyền cứng userId = 1 để test API
-      home: const ListProductManagementScreen(userId: 2), 
-
+      // home: const ListProductManagementScreen(userId: 2), 
+      home: ListDiscountScreen(),
       // Đã xóa toàn bộ thuộc tính 'routes:' để app không bị vướng bận các màn hình khác
     );
   }

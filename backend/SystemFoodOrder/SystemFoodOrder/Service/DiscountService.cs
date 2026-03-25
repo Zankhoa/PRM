@@ -24,7 +24,7 @@ namespace SystemFoodOrder.Service
                 .Select(d => new DiscountListDTO
                 {
                     DiscountId = d.DiscountId,
-                    DiscountCode = d.DiscountCode,
+                    DiscountCode = d.DiscountCode ?? string.Empty,
                     StartDate = d.StartDate,
                     EndDate = d.EndDate,
                     PercentDiscount = d.PercentDiscount,
