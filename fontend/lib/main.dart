@@ -54,7 +54,7 @@ class ShopOwnerApp extends StatelessWidget {
 
       // THAY ĐỔI CỐT LÕI Ở ĐÂY:
       // Gắn trực tiếp màn hình OrderHistoryScreen và truyền cứng userId = 1 để test API
-      home: const UserMainShellScreen(userId: 1), // Thay bằng ListProductManagementScreen() để
+      home: const DashboardScreen(), // Thay bằng ListProductManagementScreen() để
 
       // Đã xóa toàn bộ thuộc tính 'routes:' để app không bị vướng bận các màn hình khác
     );
