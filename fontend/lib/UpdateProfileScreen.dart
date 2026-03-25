@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class UpdateProfileScreen extends StatefulWidget {
   const UpdateProfileScreen({super.key});
@@ -9,10 +12,117 @@ class UpdateProfileScreen extends StatefulWidget {
 
 class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
   final _formKey = GlobalKey<FormState>();
-  final _nameController = TextEditingController(text: "John Doe");
-  final _emailController = TextEditingController(text: "johndoe@email.com");
-  final _phoneController = TextEditingController(text: "+1 234 567 8900");
-  final _addressController = TextEditingController(text: "123 Main Street, City");
+  final _nameController = TextEditingController();
+  final _emailController = TextEditingController();
+  final _phoneController = TextEditingController();
+  final _addressController = TextEditingController();
+
+  bool _isLoading = true; // For loading the initial data
+  bool _isSaving = false; // For the save button
+  int? _userId;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadCurrentProfile(); // NEW: Fetch the user's data as soon as the screen opens
+  }
+
+  Future<void> _loadCurrentProfile() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      _userId = prefs.getInt('userId');
+
+      if (_userId == null) return;
+
+      final url = Uri.parse('http://localhost:5089/api/User/$_userId');
+      final response = await http.get(url);
+
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+        if (data['success'] == true) {
+          final user = data['user'];
+          
+          // Pre-fill the text controllers with the database data
+          setState(() {
+            _nameController.text = user['fullName'] ?? '';
+            _emailController.text = user['email'] ?? '';
+            _phoneController.text = user['phone'] ?? '';
+            _addressController.text = user['address'] ?? '';
+          });
+        }
+      }
+    } catch (e) {
+      debugPrint("Error loading profile: $e");
+    } finally {
+      if (mounted) {
+        setState(() {
+          _isLoading = false;
+        });
+      }
+    }
+  }
+
+  Future<void> _updateProfile() async {
+    if (!_formKey.currentState!.validate()) return;
+    if (_userId == null) return;
+
+    setState(() {
+      _isSaving = true;
+    });
+
+    try {
+      final url = Uri.parse('http://localhost:5089/api/User/$_userId');
+      
+      final response = await http.put(
+        url,
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({
+          'fullName': _nameController.text.trim(),
+          'email': _emailController.text.trim(),
+          'phone': _phoneController.text.trim(),
+          'address': _addressController.text.trim(),
+        }),
+      );
+
+      final data = jsonDecode(response.body);
+
+      if (response.statusCode == 200 && data['success'] == true) {
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Profile updated successfully!'),
+              backgroundColor: Colors.green,
+            ),
+          );
+          Navigator.pop(context); // Go back to the profile screen
+        }
+      } else {
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(data['message'] ?? 'Failed to update profile.'),
+              backgroundColor: Colors.red,
+            ),
+          );
+        }
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Server error: $e'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+    } finally {
+      if (mounted) {
+        setState(() {
+          _isSaving = false;
+        });
+      }
+    }
+  }
 
   @override
   void dispose() {
@@ -42,7 +152,10 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
           ),
         ),
       ),
-      body: SingleChildScrollView(
+      // NEW: Show a loading spinner until the data arrives
+      body: _isLoading 
+        ? const Center(child: CircularProgressIndicator(color: Color(0xFF6C63FF)))
+        : SingleChildScrollView(
         padding: const EdgeInsets.all(24.0),
         child: Form(
           key: _formKey,
@@ -222,12 +335,6 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                       vertical: 16,
                     ),
                   ),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter your phone number';
-                    }
-                    return null;
-                  },
                 ),
               ),
               const SizedBox(height: 20),
@@ -265,30 +372,13 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                       vertical: 16,
                     ),
                   ),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter your address';
-                    }
-                    return null;
-                  },
                 ),
               ),
               const SizedBox(height: 32),
 
-              // Save Button
+              // NEW: Save Button wired up to the API
               ElevatedButton(
-                onPressed: () {
-                  if (_formKey.currentState!.validate()) {
-                    // Handle save
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text('Profile updated successfully!'),
-                        backgroundColor: Color(0xFF6C63FF),
-                      ),
-                    );
-                    Navigator.pop(context);
-                  }
-                },
+                onPressed: _isSaving ? null : _updateProfile,
                 style: ElevatedButton.styleFrom(
                   backgroundColor: const Color(0xFF6C63FF),
                   shape: RoundedRectangleBorder(
@@ -297,14 +387,23 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                   padding: const EdgeInsets.symmetric(vertical: 16),
                   elevation: 0,
                 ),
-                child: const Text(
-                  "Save Changes",
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                  ),
-                ),
+                child: _isSaving
+                    ? const SizedBox(
+                        height: 20,
+                        width: 20,
+                        child: CircularProgressIndicator(
+                          color: Colors.white,
+                          strokeWidth: 2,
+                        ),
+                      )
+                    : const Text(
+                        "Save Changes",
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
+                      ),
               ),
               const SizedBox(height: 12),
 
