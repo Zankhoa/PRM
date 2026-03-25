@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import 'package:shop_owner_screen/data/models/product_manage_dto.dart';
 import 'package:shop_owner_screen/presentation/screens/ShopOwner/UpdateProduct.dart';
 
@@ -52,6 +51,13 @@ class ProductCardWidget extends StatelessWidget {
                 ),
                 const SizedBox(height: 4),
                 Text(
+                  product.category ?? "Không có mô tả",
+                  style: const TextStyle(fontSize: 12, color: Colors.grey),
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                ),
+                const SizedBox(height: 4),
+                Text(
                   product.isAvailable ? "Còn hàng" : "Hết hàng",
                   style: TextStyle(
                     fontSize: 12,
@@ -75,19 +81,28 @@ class ProductCardWidget extends StatelessWidget {
             children: [
               IconButton(
                 icon: const Icon(Icons.edit_outlined, color: Colors.blueGrey),
-                onPressed: () {
-                  Navigator.push(
+                onPressed: () async {
+                  // Đợi kết quả trả về từ màn Update
+                  final result = await Navigator.push(
                     context,
                     MaterialPageRoute(
                       builder: (_) => UpdateProduct(
                         initialData: {
-                          'productId': product.productId,
+                          'productId': product.productId, // Cực kỳ quan trọng
                           'title': product.nameProduct,
                           'price': product.price.toString(),
+                          'image': product.avatarImage, 
+                          'description': product.description, // Nếu có mô tả
+                          'category': product.category, // Nếu có category
+                          'isAvailable': product.isAvailable,
+                        
                         },
                       ),
                     ),
                   );
+                  if (result == true) {
+                    // Gọi hàm fetch list ở đây (hoặc truyền callback)
+                  }
                 },
               ),
               IconButton(

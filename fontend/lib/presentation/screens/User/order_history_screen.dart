@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:shop_owner_screen/data/models/order_history_dto.dart';
 import 'package:shop_owner_screen/data/service/order_history_service.dart';
 import 'package:shop_owner_screen/presentation/widgets/CustomBottomNav/custom_bottom_user.dart';
-import 'package:shop_owner_screen/presentation/widgets/history_order/custom_bottom_nav.dart' hide CustomBottomNav;
 import 'package:shop_owner_screen/presentation/widgets/history_order/history_order_widgets.dart';
 
 class OrderHistoryScreen extends StatefulWidget {

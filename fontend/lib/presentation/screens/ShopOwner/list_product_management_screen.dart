@@ -8,15 +8,15 @@ import 'package:shop_owner_screen/presentation/widgets/product_manage/product_ca
 
 
 
-class ListProductManagementScreen extends StatefulWidget {
+class ListAccountManagment extends StatefulWidget {
   final int userId;
-  const ListProductManagementScreen({super.key, required this.userId});
+  const ListAccountManagment({super.key, required this.userId});
 
   @override
-  State<ListProductManagementScreen> createState() => _ListProductManagementScreenState();
+  State<ListAccountManagment> createState() => _ListAccountManagmenttScreenState();
 }
 
-class _ListProductManagementScreenState extends State<ListProductManagementScreen> {
+class _ListAccountManagmenttScreenState extends State<ListAccountManagment> {
   final ProductManageService _productService = ProductManageService();
   final ScrollController _scrollController = ScrollController();
   
@@ -118,8 +118,27 @@ class _ListProductManagementScreenState extends State<ListProductManagementScree
                   ),
                 ),
                 const SizedBox(width: 12),
-                ElevatedButton(
-                  onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const CreateProduct())),
+              ElevatedButton(
+                  // 1. Chuyển thành hàm async để chờ kết quả trả về
+                  onPressed: () async {
+                    // 2. Lắng nghe tín hiệu trả về từ màn CreateProduct (biến result)
+                    final result = await Navigator.push(
+                      context, 
+                      MaterialPageRoute(builder: (_) => const CreateProduct())
+                    );
+                    
+                    // 3. Nếu màn kia trả về true (tức là đã gọi API thêm thành công)
+                    if (result == true) {
+                      // Reset lại các biến phân trang về trạng thái ban đầu
+                      setState(() {
+                        _page = 1;
+                        _products.clear();
+                        _hasMoreData = true;
+                      });
+                      // Gọi lại hàm kéo dữ liệu mới nhất từ DB về
+                      _fetchInitialProducts();
+                    }
+                  },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color(0xFF6C63FF),
                     padding: const EdgeInsets.all(14),
@@ -130,20 +149,6 @@ class _ListProductManagementScreenState extends State<ListProductManagementScree
               ],
             ),
           ),
-
-          /// CATEGORY
-          SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: Row(
-              children: [
-                _buildCategoryChip("All Items", true),
-                _buildCategoryChip("Main Course", false),
-                _buildCategoryChip("Starters", false),
-              ],
-            ),
-          ),
-
           /// PRODUCT LIST (Đã gắn dữ liệu động)
           Expanded(
             child: _isLoading
