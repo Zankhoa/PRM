@@ -1,24 +1,56 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shop_owner_screen/presentation/screens/ShopOwner/list_product_management_screen.dart';
+import 'package:shop_owner_screen/presentation/screens/User/LoginScreen.dart';
 import 'package:shop_owner_screen/presentation/screens/User/order_history_screen.dart';
+import 'package:shop_owner_screen/presentation/screens/User/product_list_user_screen.dart';
 import 'package:shop_owner_screen/presentation/screens/User/user_main_shell_screen.dart';
+
 // import 'package:shop_owner_screen/presentation/screens/User/order_history_screen.dart';
 
+void main() async {
+  // NEW: Ensure Flutter is initialized before using SharedPreferences
+  WidgetsFlutterBinding.ensureInitialized();
 
-void main() {
-  runApp(const ShopOwnerApp());
+  // NEW: Check for saved login data
+  final prefs = await SharedPreferences.getInstance();
+  final int? roleId = prefs.getInt('roleId');
+
+  final int? userId = prefs.getInt('userId');
+
+  // NEW: Determine the initial screen based on the saved RoleId
+  Widget startingScreen = const LoginScreen(); // Default to login
+
+  if (roleId != null && userId != null) {
+    if (roleId == 1) {
+      // 1. Removed 'const' 
+      // 2. Added '!' to tell Dart it is definitely not null
+      startingScreen = const UserMainShellScreen(userId: 1); 
+    } else if (roleId == 2) {
+      startingScreen = ListProductManagementScreen(userId: userId!);
+    } else if (roleId == 3) {
+      startingScreen = ProductListUserScreen(
+        userId: userId!, 
+        onCartChanged: () {},
+      );
+    }
+  }
+
+  // NEW: Pass the determined screen to the app
+  runApp(ShopOwnerApp(initialScreen: startingScreen));
 }
 
 class ShopOwnerApp extends StatelessWidget {
-  const ShopOwnerApp({super.key});
+  final Widget initialScreen;
+
+  // NEW: Update the constructor to require the initialScreen
+  const ShopOwnerApp({super.key, required this.initialScreen});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Food Order',
       debugShowCheckedModeBanner: false,
-      
-      // Giữ nguyên phần Theme của bạn vì nó setup màu sắc và font chữ rất chuẩn
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(
           seedColor: const Color(0xFF6C63FF),
@@ -50,12 +82,7 @@ class ShopOwnerApp extends StatelessWidget {
           ),
         ),
       ),
-
-      // THAY ĐỔI CỐT LÕI Ở ĐÂY:
-      // Gắn trực tiếp màn hình OrderHistoryScreen và truyền cứng userId = 1 để test API
-      home: const UserMainShellScreen(userId: 1), // Thay bằng ListProductManagementScreen() để
-
-      // Đã xóa toàn bộ thuộc tính 'routes:' để app không bị vướng bận các màn hình khác
+      home: initialScreen,
     );
   }
 }
