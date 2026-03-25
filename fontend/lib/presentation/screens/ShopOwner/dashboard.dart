@@ -1,21 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:shop_owner_screen/presentation/screens/ShopOwner/list_product_management_screen%20copy.dart';
 import '../../../data/models/shop_owner_dto.dart';
 import '../../../data/service/shop_owner_service.dart';
 import 'profile.dart';
-import 'list_product_management_screen.dart';
 import 'discount/list_discount.dart';
 
-class DashboardScreen extends StatelessWidget {
+// 1. SỬA THÀNH StatefulWidget
+class DashboardScreen extends StatefulWidget {
   const DashboardScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return const _DashboardScreenState();
-  }
+  State<DashboardScreen> createState() => _DashboardScreenState();
 }
 
-class _DashboardScreenState extends State<_DashboardScreenState> {
-  final ShopOwnerService _shopOwnerService = ShopOwnerService();
+// 2. SỬA KẾ THỪA State<DashboardScreen>
+class _DashboardScreenState extends State<DashboardScreen> {
+  // Nếu ShopOwnerService.getProfile() là hàm static thì biến này có thể bỏ đi cho đỡ rác code
+  // final ShopOwnerService _shopOwnerService = ShopOwnerService();
 
   Widget buildCard(String title, IconData icon, VoidCallback onTap) {
     return GestureDetector(
@@ -51,7 +52,7 @@ class _DashboardScreenState extends State<_DashboardScreenState> {
     return Scaffold(
       backgroundColor: const Color(0xFFF5F6FA),
       body: FutureBuilder<ShopOwnerDTO>(
-        future: ShopOwnerService.getProfile(),
+        future: ShopOwnerService.getProfile(), // Giữ nguyên nếu đây là hàm static
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
             return const Center(child: CircularProgressIndicator());
@@ -117,7 +118,7 @@ class _DashboardScreenState extends State<_DashboardScreenState> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (_) =>  ProfileScreen()),
+                            builder: (_) => const ProfileScreen()), // Đã xóa khoảng trắng lỗi ở đây
                       );
                     }),
                   ],
