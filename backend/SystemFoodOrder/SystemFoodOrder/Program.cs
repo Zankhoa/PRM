@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using SystemFoodOrder.Data;
+using SystemFoodOrder.Service;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -8,6 +9,7 @@ builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlServer(buil
 
 // Add services to the container.
 builder.Services.AddControllers();
+builder.Services.AddScoped<DiscountService>();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 

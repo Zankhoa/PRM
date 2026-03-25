@@ -7,15 +7,15 @@ public partial class Order
 {
     public int OrderId { get; set; }
 
-    public int? UserId { get; set; }
+    public int UserId { get; set; }
 
-    public decimal? TotalPrice { get; set; }
+    public decimal TotalPrice { get; set; }
 
-    public decimal? DeliveryFee { get; set; }
+    public decimal DeliveryFee { get; set; } = 0;
 
-    public string? Status { get; set; }
+    public string Status { get; set; } = "Pending";
 
-    public DateTime? CreatedAt { get; set; }
+    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
     public string? DeliveryAddress { get; set; }
 

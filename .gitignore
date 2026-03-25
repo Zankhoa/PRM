@@ -1,0 +1,49 @@
+# ==================== .NET / Visual Studio ====================
+.vs/
+bin/
+obj/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+*.pdb
+*.exe
+*.dll
+*.cache
+*.vsidx
+FileContentIndex/
+CopilotIndices/
+DesignTimeBuild/
+*.log
+
+# Build results
+**/Debug/
+**/Release/
+**/x64/
+**/x86/
+
+# .NET Core / ASP.NET Core
+project.assets.json
+project.nuget.cache
+*.nuget.g.props
+*.nuget.g.targets
+ApiEndpoints.json
+
+# ==================== Flutter ====================
+fontend/.dart_tool/
+fontend/build/
+fontend/.idea/
+fontend/ios/Pods/
+fontend/ios/Flutter/App.framework/
+fontend/android/.gradle/
+fontend/android/app/debug/
+fontend/macos/Flutter/FlutterMacOS.podspec
+fontend/windows/flutter/generated_plugin_registrant.*
+fontend/linux/flutter/generated_plugin_registrant.*
+fontend/pubspec.lock   # nếu bạn không muốn commit pubspec.lock
+
+# ==================== General ====================
+.DS_Store
+*.tmp
+*.log
+Thumbs.db
