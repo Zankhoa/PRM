@@ -23,6 +23,7 @@ public static class DatabaseBootstrap
     public static async Task RunAsync(AppDbContext db, CancellationToken ct = default)
     {
         await EnsureCartItemTableAsync(db, ct);
+        await EnsureBlogAndNotificationTablesAsync(db, ct);
         await EnsureDemoCatalogAsync(db, ct);
     }
 
@@ -40,6 +41,36 @@ BEGIN
         CONSTRAINT FK_CartItem_User FOREIGN KEY (userId) REFERENCES [USER](userId) ON DELETE CASCADE,
         CONSTRAINT FK_CartItem_Product FOREIGN KEY (productId) REFERENCES PRODUCT(productId),
         CONSTRAINT UQ_CartItem_User_Product UNIQUE (userId, productId)
+    );
+END";
+        await db.Database.ExecuteSqlRawAsync(sql, cancellationToken: ct);
+    }
+
+    // Ensure Blog and Notification tables exist
+    private static async Task EnsureBlogAndNotificationTablesAsync(AppDbContext db, CancellationToken ct)
+    {
+        const string sql = @"
+IF NOT EXISTS (SELECT * FROM sys.tables WHERE name = 'BLOG')
+BEGIN
+    CREATE TABLE BLOG (
+        blogId INT IDENTITY(1,1) PRIMARY KEY,
+        userId INT NULL,
+        title NVARCHAR(500) NOT NULL,
+        content NVARCHAR(MAX) NOT NULL,
+        createdAt DATETIME NULL,
+        CONSTRAINT FK_Blog_User FOREIGN KEY (userId) REFERENCES [USER](userId)
+    );
+END;
+IF NOT EXISTS (SELECT * FROM sys.tables WHERE name = 'NOTIFICATION')
+BEGIN
+    CREATE TABLE NOTIFICATION (
+        notificationId INT IDENTITY(1,1) PRIMARY KEY,
+        userId INT NULL,
+        title NVARCHAR(500) NULL,
+        message NVARCHAR(MAX) NULL,
+        isRead BIT NOT NULL DEFAULT 0,
+        createdAt DATETIME NULL,
+        CONSTRAINT FK_Notification_User FOREIGN KEY (userId) REFERENCES [USER](userId)
     );
 END";
         await db.Database.ExecuteSqlRawAsync(sql, cancellationToken: ct);

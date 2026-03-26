@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shop_owner_screen/presentation/screens/User/product_list_user_screen.dart';
-import 'package:shop_owner_screen/presentation/screens/User/cart_user_screen.dart'; 
-import 'package:shop_owner_screen/presentation/screens/User/UserProfileScreen.dart'; 
+import 'package:shop_owner_screen/presentation/screens/User/cart_user_screen.dart';
+import 'package:shop_owner_screen/presentation/screens/User/UserProfileScreen.dart';
 
 class CustomBottomNav extends StatelessWidget {
   final int userId;
@@ -38,7 +38,7 @@ class CustomBottomNav extends StatelessWidget {
                   onCartChanged: () {}, // Empty callback for now
                 ),
               ),
-              
+
               // 2. Đơn hàng (Cart/Orders)
               _buildNavItem(
                 context: context,
@@ -54,7 +54,7 @@ class CustomBottomNav extends StatelessWidget {
                       MaterialPageRoute(
                         builder: (context) => ProductListUserScreen(
                           userId: userId,
-                          onCartChanged: () {}, 
+                          onCartChanged: () {},
                         ),
                       ),
                     );
@@ -68,9 +68,9 @@ class CustomBottomNav extends StatelessWidget {
                       ),
                     );
                   },
-                ), 
+                ),
               ),
-              
+
               // 3. Hồ sơ (Profile)
               _buildNavItem(
                 context: context,

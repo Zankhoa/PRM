@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shop_owner_screen/presentation/widgets/CustomBottomNav/custom_bottom_shopwoner.dart';
 import 'package:shop_owner_screen/data/models/shop_profile_dto.dart';
 import 'package:shop_owner_screen/data/service/shop_owner_service.dart';
 import 'package:shop_owner_screen/presentation/screens/ShopOwner/edit_profile.dart';
+import 'package:shop_owner_screen/presentation/screens/User/LoginScreen.dart';
 
 class ProfileScreen extends StatefulWidget {
   final int userId;
@@ -41,6 +43,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
         _isLoading = false;
       });
     }
+  }
+
+  Future<void> _logout() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.clear();
+
+    if (!mounted) return;
+    Navigator.pushAndRemoveUntil(
+      context,
+      MaterialPageRoute(builder: (_) => const LoginScreen()),
+      (route) => false,
+    );
   }
 
   @override
@@ -147,6 +161,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             if (updated == true) _fetchProfile();
                           },
                         ),
+                        IconButton(
+                          icon: const Icon(Icons.logout_rounded, color: Colors.white),
+                          onPressed: _logout,
+                        ),
                       ],
                     ),
                   ),
@@ -238,6 +256,23 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       foregroundColor: Colors.white,
                       padding: const EdgeInsets.symmetric(vertical: 14),
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 12),
+                SizedBox(
+                  width: double.infinity,
+                  child: OutlinedButton.icon(
+                    onPressed: _logout,
+                    icon: const Icon(Icons.logout_rounded),
+                    label: const Text('Logout'),
+                    style: OutlinedButton.styleFrom(
+                      foregroundColor: const Color(0xFFC62828),
+                      side: const BorderSide(color: Color(0xFFC62828)),
+                      padding: const EdgeInsets.symmetric(vertical: 14),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(14),
+                      ),
                     ),
                   ),
                 ),

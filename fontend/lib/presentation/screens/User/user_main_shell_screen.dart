@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:shop_owner_screen/presentation/screens/User/blog_screen.dart';
 import 'package:shop_owner_screen/presentation/screens/User/cart_user_screen.dart';
 import 'package:shop_owner_screen/presentation/screens/User/orders_user_screen.dart';
 import 'package:shop_owner_screen/presentation/screens/User/product_list_user_screen.dart';
+import 'package:shop_owner_screen/presentation/screens/User/user_account_screen.dart';
 import 'package:shop_owner_screen/presentation/theme/food_order_ui.dart';
 
 class UserMainShellScreen extends StatefulWidget {
@@ -30,10 +32,8 @@ class _UserMainShellScreenState extends State<UserMainShellScreen> {
       body: IndexedStack(
         index: _index,
         children: [
-          ProductListUserScreen(
-            userId: uid,
-            onCartChanged: _bumpCart,
-          ),
+          ProductListUserScreen(userId: uid, onCartChanged: _bumpCart),
+          BlogScreen(userId: uid),
           CartUserScreen(
             key: ValueKey(_cartRefresh),
             userId: uid,
@@ -44,6 +44,7 @@ class _UserMainShellScreenState extends State<UserMainShellScreen> {
             key: ValueKey(_ordersRefresh),
             userId: uid,
           ),
+          const UserAccountScreen(),
         ],
       ),
       bottomNavigationBar: DecoratedBox(
@@ -73,14 +74,24 @@ class _UserMainShellScreenState extends State<UserMainShellScreen> {
                 label: 'Menu',
               ),
               NavigationDestination(
+                icon: Icon(Icons.article_outlined),
+                selectedIcon: Icon(Icons.article),
+                label: 'Blog',
+              ),
+              NavigationDestination(
                 icon: Icon(Icons.shopping_cart_outlined),
                 selectedIcon: Icon(Icons.shopping_cart),
-                label: 'Giỏ hàng',
+                label: 'Cart',
               ),
               NavigationDestination(
                 icon: Icon(Icons.receipt_long_outlined),
                 selectedIcon: Icon(Icons.receipt_long),
-                label: 'Đơn hàng',
+                label: 'Orders',
+              ),
+              NavigationDestination(
+                icon: Icon(Icons.person_outline),
+                selectedIcon: Icon(Icons.person),
+                label: 'Account',
               ),
             ],
           ),

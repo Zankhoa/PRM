@@ -29,6 +29,9 @@ builder.Services.AddScoped<SystemFoodOrder.Service.CheckoutService>();
 builder.Services.AddScoped<SystemFoodOrder.Service.DiscountService>();
 builder.Services.AddScoped<SystemFoodOrder.Service.OrderQueryService>();
 builder.Services.AddScoped<SystemFoodOrder.Service.ShopOrderService>();
+builder.Services.AddScoped<SystemFoodOrder.Service.NotificationService>();
+builder.Services.AddScoped<SystemFoodOrder.Service.BlogService>();
+builder.Services.AddScoped<SystemFoodOrder.Service.AdminUserService>();
 
 // Add services to the container.
 builder.Services.AddControllers().AddJsonOptions(o =>

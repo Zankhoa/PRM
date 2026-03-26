@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:shop_owner_screen/data/api_config.dart';
+import 'package:shop_owner_screen/data/service/api_http_helpers.dart';
+import 'package:shop_owner_screen/data/service/json_response_helper.dart';
 import 'LoginScreen.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -35,7 +38,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   Future<void> _register() async {
     // 1. Validate form and terms
     if (!_formKey.currentState!.validate()) return;
-    
+
     if (!_agreeToTerms) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
@@ -51,8 +54,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     });
 
     try {
-      // NOTE: Using localhost because you are testing on Chrome Web
-      final url = Uri.parse('https://localhost:7008/api/Auth/register');
+      final url = Uri.parse('${ApiConfig.baseUrl}/api/Auth/register');
 
       final response = await http.post(
         url,
@@ -66,9 +68,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
         }),
       );
 
-      final data = jsonDecode(response.body);
+      final data = tryDecodeJsonObject(response.body);
 
-      if (response.statusCode == 200 && data['success'] == true) {
+      if (response.statusCode == 200 && data?['success'] == true) {
         if (mounted) {
           // Show success message
           ScaffoldMessenger.of(context).showSnackBar(
@@ -77,7 +79,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
               backgroundColor: Colors.green,
             ),
           );
-          
+
           // Send them back to the login screen
           Navigator.pushReplacement(
             context,
@@ -87,9 +89,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
       } else {
         // Show API error (e.g., "Username already exists")
         if (mounted) {
+          final message = data?['message']?.toString() ??
+              formatApiException(response, 'Registration failed');
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: Text(data['message'] ?? 'Registration failed.'),
+              content: Text(message),
               backgroundColor: Colors.red,
             ),
           );
@@ -187,7 +191,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       controller: _usernameController,
                       decoration: const InputDecoration(
                         hintText: "Username",
-                        prefixIcon: Icon(Icons.account_circle_outlined, color: Colors.grey),
+                        prefixIcon: Icon(Icons.account_circle_outlined,
+                            color: Colors.grey),
                         border: InputBorder.none,
                         contentPadding: EdgeInsets.symmetric(
                           horizontal: 16,
@@ -219,7 +224,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       controller: _nameController,
                       decoration: const InputDecoration(
                         hintText: "Full Name",
-                        prefixIcon: Icon(Icons.person_outline, color: Colors.grey),
+                        prefixIcon:
+                            Icon(Icons.person_outline, color: Colors.grey),
                         border: InputBorder.none,
                         contentPadding: EdgeInsets.symmetric(
                           horizontal: 16,
@@ -253,7 +259,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       keyboardType: TextInputType.emailAddress,
                       decoration: const InputDecoration(
                         hintText: "Email",
-                        prefixIcon: Icon(Icons.email_outlined, color: Colors.grey),
+                        prefixIcon:
+                            Icon(Icons.email_outlined, color: Colors.grey),
                         border: InputBorder.none,
                         contentPadding: EdgeInsets.symmetric(
                           horizontal: 16,
@@ -290,7 +297,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       obscureText: _obscurePassword,
                       decoration: InputDecoration(
                         hintText: "Password",
-                        prefixIcon: const Icon(Icons.lock_outline, color: Colors.grey),
+                        prefixIcon:
+                            const Icon(Icons.lock_outline, color: Colors.grey),
                         suffixIcon: IconButton(
                           icon: Icon(
                             _obscurePassword
@@ -340,7 +348,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       obscureText: _obscureConfirmPassword,
                       decoration: InputDecoration(
                         hintText: "Confirm Password",
-                        prefixIcon: const Icon(Icons.lock_outline, color: Colors.grey),
+                        prefixIcon:
+                            const Icon(Icons.lock_outline, color: Colors.grey),
                         suffixIcon: IconButton(
                           icon: Icon(
                             _obscureConfirmPassword
@@ -350,7 +359,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           ),
                           onPressed: () {
                             setState(() {
-                              _obscureConfirmPassword = !_obscureConfirmPassword;
+                              _obscureConfirmPassword =
+                                  !_obscureConfirmPassword;
                             });
                           },
                         ),

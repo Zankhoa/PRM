@@ -2,10 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:shop_owner_screen/data/models/user_product_dto.dart';
 import 'package:shop_owner_screen/data/service/user_cart_api_service.dart';
 import 'package:shop_owner_screen/data/service/user_catalog_service.dart';
+import 'package:shop_owner_screen/presentation/screens/User/blog_screen.dart';
+import 'package:shop_owner_screen/presentation/screens/User/notifications_screen.dart';
+import 'package:shop_owner_screen/presentation/screens/User/payment_status_screen.dart';
+import 'package:shop_owner_screen/presentation/screens/User/product_detail_user_screen.dart';
 import 'package:shop_owner_screen/presentation/theme/food_order_ui.dart';
 import 'package:shop_owner_screen/presentation/widgets/CustomBottomNav/custom_bottom_user.dart';
 import 'package:shop_owner_screen/presentation/widgets/user_menu/product_grid_card.dart';
-import 'package:shop_owner_screen/presentation/screens/User/product_detail_user_screen.dart';
 
 class ProductListUserScreen extends StatefulWidget {
   final int userId;
@@ -75,24 +78,30 @@ class _ProductListUserScreenState extends State<ProductListUserScreen> {
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('Đã thêm: ${p.name}'),
+          content: Text('Added: ${p.name}'),
           behavior: SnackBarBehavior.floating,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
         ),
       );
     } catch (e) {
       if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(e.toString())));
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text(e.toString())));
     }
   }
 
-  Widget _categoryChip({required String label, required bool selected, required VoidCallback onTap}) {
+  Widget _categoryChip(
+      {required String label,
+      required bool selected,
+      required VoidCallback onTap}) {
     return Padding(
       padding: const EdgeInsets.only(right: 8),
       child: FilterChip(
         showCheckmark: false,
         avatar: selected
-            ? Icon(Icons.check, size: 18, color: Theme.of(context).colorScheme.primary)
+            ? Icon(Icons.check,
+                size: 18, color: Theme.of(context).colorScheme.primary)
             : null,
         label: Text(label),
         selected: selected,
@@ -101,12 +110,24 @@ class _ProductListUserScreenState extends State<ProductListUserScreen> {
     );
   }
 
+  void _openPage(Widget screen) {
+    Navigator.of(context).push(MaterialPageRoute(builder: (_) => screen));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: FoodOrderUi.scaffoldBg,
       appBar: AppBar(
         title: const Text('Menu'),
+        actions: [
+          IconButton(
+            tooltip: 'Notifications',
+            onPressed: () =>
+                _openPage(NotificationsScreen(userId: widget.userId)),
+            icon: const Icon(Icons.notifications_outlined),
+          ),
+        ],
       ),
       body: Column(
         children: [
@@ -115,10 +136,39 @@ class _ProductListUserScreenState extends State<ProductListUserScreen> {
             child: TextField(
               controller: _search,
               decoration: const InputDecoration(
-                hintText: 'Tìm món...',
+                hintText: 'Search products...',
                 prefixIcon: Icon(Icons.search),
               ),
               onSubmitted: (_) => _load(),
+            ),
+          ),
+          SizedBox(
+            height: 108,
+            child: ListView(
+              scrollDirection: Axis.horizontal,
+              padding: const EdgeInsets.symmetric(horizontal: 12),
+              children: [
+                _QuickLinkCard(
+                  icon: Icons.article_outlined,
+                  title: 'Blog',
+                  subtitle: 'User posts and sharing',
+                  onTap: () => _openPage(BlogScreen(userId: widget.userId)),
+                ),
+                _QuickLinkCard(
+                  icon: Icons.notifications_outlined,
+                  title: 'Notifications',
+                  subtitle: 'Order and account updates',
+                  onTap: () =>
+                      _openPage(NotificationsScreen(userId: widget.userId)),
+                ),
+                _QuickLinkCard(
+                  icon: Icons.payments_outlined,
+                  title: 'Payment Status',
+                  subtitle: 'Check your order payment',
+                  onTap: () =>
+                      _openPage(PaymentStatusScreen(userId: widget.userId)),
+                ),
+              ],
             ),
           ),
           SizedBox(
@@ -128,7 +178,7 @@ class _ProductListUserScreenState extends State<ProductListUserScreen> {
               padding: const EdgeInsets.symmetric(horizontal: 12),
               children: [
                 _categoryChip(
-                  label: 'Tất cả',
+                  label: 'All',
                   selected: _categoryFilter == null,
                   onTap: () {
                     setState(() => _categoryFilter = null);
@@ -153,7 +203,7 @@ class _ProductListUserScreenState extends State<ProductListUserScreen> {
             child: Row(
               children: [
                 Text(
-                  'Sản phẩm',
+                  'Products',
                   style: TextStyle(
                     fontWeight: FontWeight.w700,
                     fontSize: 15,
@@ -162,13 +212,14 @@ class _ProductListUserScreenState extends State<ProductListUserScreen> {
                 ),
                 const Spacer(),
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                   decoration: BoxDecoration(
                     color: FoodOrderUi.chipSelectedBg,
                     borderRadius: BorderRadius.circular(20),
                   ),
                   child: Text(
-                    '${_list.length} món',
+                    '${_list.length} items',
                     style: const TextStyle(
                       fontSize: 13,
                       fontWeight: FontWeight.w600,
@@ -189,7 +240,8 @@ class _ProductListUserScreenState extends State<ProductListUserScreen> {
                           child: Text(
                             _error!,
                             textAlign: TextAlign.center,
-                            style: const TextStyle(color: FoodOrderUi.textPrimary),
+                            style:
+                                const TextStyle(color: FoodOrderUi.textPrimary),
                           ),
                         ),
                       )
@@ -198,7 +250,8 @@ class _ProductListUserScreenState extends State<ProductListUserScreen> {
                         onRefresh: _load,
                         child: GridView.builder(
                           padding: const EdgeInsets.fromLTRB(12, 0, 12, 16),
-                          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                          gridDelegate:
+                              const SliverGridDelegateWithFixedCrossAxisCount(
                             crossAxisCount: 2,
                             mainAxisSpacing: 12,
                             crossAxisSpacing: 12,
@@ -211,7 +264,8 @@ class _ProductListUserScreenState extends State<ProductListUserScreen> {
                               product: p,
                               onAddToCart: () => _quickAdd(p),
                               onOpenDetail: () async {
-                                final ok = await Navigator.of(context).push<bool>(
+                                final ok =
+                                    await Navigator.of(context).push<bool>(
                                   MaterialPageRoute(
                                     builder: (_) => ProductDetailUserScreen(
                                       userId: widget.userId,
@@ -231,6 +285,74 @@ class _ProductListUserScreenState extends State<ProductListUserScreen> {
         ],
       ),
       bottomNavigationBar: CustomBottomNav(userId: widget.userId),
+    );
+  }
+}
+
+class _QuickLinkCard extends StatelessWidget {
+  final IconData icon;
+  final String title;
+  final String subtitle;
+  final VoidCallback onTap;
+
+  const _QuickLinkCard({
+    required this.icon,
+    required this.title,
+    required this.subtitle,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(right: 12),
+      child: SizedBox(
+        width: 170,
+        child: Card(
+          child: InkWell(
+            borderRadius: BorderRadius.circular(FoodOrderUi.radiusMd),
+            onTap: onTap,
+            child: Padding(
+              padding: const EdgeInsets.all(14),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Container(
+                    width: 40,
+                    height: 40,
+                    decoration: BoxDecoration(
+                      color: FoodOrderUi.chipSelectedBg,
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: Icon(icon, color: FoodOrderUi.textPrimary),
+                  ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        title,
+                        style: const TextStyle(
+                          fontWeight: FontWeight.w700,
+                          color: FoodOrderUi.textPrimary,
+                        ),
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        subtitle,
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: FoodOrderUi.textPrimary.withOpacity(0.6),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
     );
   }
 }

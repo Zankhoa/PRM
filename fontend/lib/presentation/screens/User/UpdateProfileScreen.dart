@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:shop_owner_screen/data/api_config.dart';
 
 class UpdateProfileScreen extends StatefulWidget {
   const UpdateProfileScreen({super.key});
@@ -34,14 +35,14 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
 
       if (_userId == null) return;
 
-      final url = Uri.parse('http://localhost:5089/api/UserProfile/$_userId');
+      final url = Uri.parse('${ApiConfig.baseUrl}/api/UserProfile/$_userId');
       final response = await http.get(url);
 
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
         if (data['success'] == true) {
           final user = data['user'];
-          
+
           // Pre-fill the text controllers with the database data
           setState(() {
             _nameController.text = user['fullName'] ?? '';
@@ -71,8 +72,8 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
     });
 
     try {
-      final url = Uri.parse('https://localhost:7008/api/UserProfile/$_userId');
-      
+      final url = Uri.parse('${ApiConfig.baseUrl}/api/UserProfile/$_userId');
+
       final response = await http.put(
         url,
         headers: {'Content-Type': 'application/json'},
@@ -153,285 +154,290 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
         ),
       ),
       // NEW: Show a loading spinner until the data arrives
-      body: _isLoading 
-        ? const Center(child: CircularProgressIndicator(color: Color(0xFF6C63FF)))
-        : SingleChildScrollView(
-        padding: const EdgeInsets.all(24.0),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              // Profile Picture
-              Center(
-                child: Stack(
+      body: _isLoading
+          ? const Center(
+              child: CircularProgressIndicator(color: Color(0xFF6C63FF)))
+          : SingleChildScrollView(
+              padding: const EdgeInsets.all(24.0),
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    Container(
-                      width: 120,
-                      height: 120,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: const Color(0xFF6C63FF).withOpacity(0.1),
-                        border: Border.all(
-                          color: const Color(0xFF6C63FF),
-                          width: 3,
-                        ),
-                      ),
-                      child: const Icon(
-                        Icons.person,
-                        size: 60,
-                        color: Color(0xFF6C63FF),
-                      ),
-                    ),
-                    Positioned(
-                      bottom: 0,
-                      right: 0,
-                      child: GestureDetector(
-                        onTap: () {
-                          // Handle image upload
-                        },
-                        child: Container(
-                          width: 36,
-                          height: 36,
-                          decoration: BoxDecoration(
-                            color: const Color(0xFF6C63FF),
-                            shape: BoxShape.circle,
-                            border: Border.all(
-                              color: Colors.white,
-                              width: 3,
+                    // Profile Picture
+                    Center(
+                      child: Stack(
+                        children: [
+                          Container(
+                            width: 120,
+                            height: 120,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: const Color(0xFF6C63FF).withOpacity(0.1),
+                              border: Border.all(
+                                color: const Color(0xFF6C63FF),
+                                width: 3,
+                              ),
+                            ),
+                            child: const Icon(
+                              Icons.person,
+                              size: 60,
+                              color: Color(0xFF6C63FF),
                             ),
                           ),
-                          child: const Icon(
-                            Icons.camera_alt,
-                            size: 18,
-                            color: Colors.white,
+                          Positioned(
+                            bottom: 0,
+                            right: 0,
+                            child: GestureDetector(
+                              onTap: () {
+                                // Handle image upload
+                              },
+                              child: Container(
+                                width: 36,
+                                height: 36,
+                                decoration: BoxDecoration(
+                                  color: const Color(0xFF6C63FF),
+                                  shape: BoxShape.circle,
+                                  border: Border.all(
+                                    color: Colors.white,
+                                    width: 3,
+                                  ),
+                                ),
+                                child: const Icon(
+                                  Icons.camera_alt,
+                                  size: 18,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(height: 32),
+
+                    // Full Name Field
+                    const Text(
+                      "Full Name",
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.black,
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    Container(
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(12),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.05),
+                            blurRadius: 5,
+                          ),
+                        ],
+                      ),
+                      child: TextFormField(
+                        controller: _nameController,
+                        decoration: const InputDecoration(
+                          hintText: "Enter your full name",
+                          prefixIcon:
+                              Icon(Icons.person_outline, color: Colors.grey),
+                          border: InputBorder.none,
+                          contentPadding: EdgeInsets.symmetric(
+                            horizontal: 16,
+                            vertical: 16,
+                          ),
+                        ),
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Please enter your name';
+                          }
+                          return null;
+                        },
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+
+                    // Email Field
+                    const Text(
+                      "Email",
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.black,
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    Container(
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(12),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.05),
+                            blurRadius: 5,
+                          ),
+                        ],
+                      ),
+                      child: TextFormField(
+                        controller: _emailController,
+                        keyboardType: TextInputType.emailAddress,
+                        decoration: const InputDecoration(
+                          hintText: "Enter your email",
+                          prefixIcon:
+                              Icon(Icons.email_outlined, color: Colors.grey),
+                          border: InputBorder.none,
+                          contentPadding: EdgeInsets.symmetric(
+                            horizontal: 16,
+                            vertical: 16,
+                          ),
+                        ),
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Please enter your email';
+                          }
+                          if (!value.contains('@')) {
+                            return 'Please enter a valid email';
+                          }
+                          return null;
+                        },
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+
+                    // Phone Field
+                    const Text(
+                      "Phone Number",
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.black,
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    Container(
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(12),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.05),
+                            blurRadius: 5,
+                          ),
+                        ],
+                      ),
+                      child: TextFormField(
+                        controller: _phoneController,
+                        keyboardType: TextInputType.phone,
+                        decoration: const InputDecoration(
+                          hintText: "Enter your phone number",
+                          prefixIcon:
+                              Icon(Icons.phone_outlined, color: Colors.grey),
+                          border: InputBorder.none,
+                          contentPadding: EdgeInsets.symmetric(
+                            horizontal: 16,
+                            vertical: 16,
                           ),
                         ),
                       ),
                     ),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 32),
+                    const SizedBox(height: 20),
 
-              // Full Name Field
-              const Text(
-                "Full Name",
-                style: TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w600,
-                  color: Colors.black,
-                ),
-              ),
-              const SizedBox(height: 8),
-              Container(
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(12),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.05),
-                      blurRadius: 5,
+                    // Address Field
+                    const Text(
+                      "Address",
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.black,
+                      ),
                     ),
-                  ],
-                ),
-                child: TextFormField(
-                  controller: _nameController,
-                  decoration: const InputDecoration(
-                    hintText: "Enter your full name",
-                    prefixIcon: Icon(Icons.person_outline, color: Colors.grey),
-                    border: InputBorder.none,
-                    contentPadding: EdgeInsets.symmetric(
-                      horizontal: 16,
-                      vertical: 16,
-                    ),
-                  ),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter your name';
-                    }
-                    return null;
-                  },
-                ),
-              ),
-              const SizedBox(height: 20),
-
-              // Email Field
-              const Text(
-                "Email",
-                style: TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w600,
-                  color: Colors.black,
-                ),
-              ),
-              const SizedBox(height: 8),
-              Container(
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(12),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.05),
-                      blurRadius: 5,
-                    ),
-                  ],
-                ),
-                child: TextFormField(
-                  controller: _emailController,
-                  keyboardType: TextInputType.emailAddress,
-                  decoration: const InputDecoration(
-                    hintText: "Enter your email",
-                    prefixIcon: Icon(Icons.email_outlined, color: Colors.grey),
-                    border: InputBorder.none,
-                    contentPadding: EdgeInsets.symmetric(
-                      horizontal: 16,
-                      vertical: 16,
-                    ),
-                  ),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter your email';
-                    }
-                    if (!value.contains('@')) {
-                      return 'Please enter a valid email';
-                    }
-                    return null;
-                  },
-                ),
-              ),
-              const SizedBox(height: 20),
-
-              // Phone Field
-              const Text(
-                "Phone Number",
-                style: TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w600,
-                  color: Colors.black,
-                ),
-              ),
-              const SizedBox(height: 8),
-              Container(
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(12),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.05),
-                      blurRadius: 5,
-                    ),
-                  ],
-                ),
-                child: TextFormField(
-                  controller: _phoneController,
-                  keyboardType: TextInputType.phone,
-                  decoration: const InputDecoration(
-                    hintText: "Enter your phone number",
-                    prefixIcon: Icon(Icons.phone_outlined, color: Colors.grey),
-                    border: InputBorder.none,
-                    contentPadding: EdgeInsets.symmetric(
-                      horizontal: 16,
-                      vertical: 16,
-                    ),
-                  ),
-                ),
-              ),
-              const SizedBox(height: 20),
-
-              // Address Field
-              const Text(
-                "Address",
-                style: TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w600,
-                  color: Colors.black,
-                ),
-              ),
-              const SizedBox(height: 8),
-              Container(
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(12),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.05),
-                      blurRadius: 5,
-                    ),
-                  ],
-                ),
-                child: TextFormField(
-                  controller: _addressController,
-                  maxLines: 3,
-                  decoration: const InputDecoration(
-                    hintText: "Enter your address",
-                    prefixIcon: Icon(Icons.location_on_outlined, color: Colors.grey),
-                    border: InputBorder.none,
-                    contentPadding: EdgeInsets.symmetric(
-                      horizontal: 16,
-                      vertical: 16,
-                    ),
-                  ),
-                ),
-              ),
-              const SizedBox(height: 32),
-
-              // NEW: Save Button wired up to the API
-              ElevatedButton(
-                onPressed: _isSaving ? null : _updateProfile,
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFF6C63FF),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  padding: const EdgeInsets.symmetric(vertical: 16),
-                  elevation: 0,
-                ),
-                child: _isSaving
-                    ? const SizedBox(
-                        height: 20,
-                        width: 20,
-                        child: CircularProgressIndicator(
-                          color: Colors.white,
-                          strokeWidth: 2,
+                    const SizedBox(height: 8),
+                    Container(
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(12),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.05),
+                            blurRadius: 5,
+                          ),
+                        ],
+                      ),
+                      child: TextFormField(
+                        controller: _addressController,
+                        maxLines: 3,
+                        decoration: const InputDecoration(
+                          hintText: "Enter your address",
+                          prefixIcon: Icon(Icons.location_on_outlined,
+                              color: Colors.grey),
+                          border: InputBorder.none,
+                          contentPadding: EdgeInsets.symmetric(
+                            horizontal: 16,
+                            vertical: 16,
+                          ),
                         ),
-                      )
-                    : const Text(
-                        "Save Changes",
+                      ),
+                    ),
+                    const SizedBox(height: 32),
+
+                    // NEW: Save Button wired up to the API
+                    ElevatedButton(
+                      onPressed: _isSaving ? null : _updateProfile,
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color(0xFF6C63FF),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        padding: const EdgeInsets.symmetric(vertical: 16),
+                        elevation: 0,
+                      ),
+                      child: _isSaving
+                          ? const SizedBox(
+                              height: 20,
+                              width: 20,
+                              child: CircularProgressIndicator(
+                                color: Colors.white,
+                                strokeWidth: 2,
+                              ),
+                            )
+                          : const Text(
+                              "Save Changes",
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
+                              ),
+                            ),
+                    ),
+                    const SizedBox(height: 12),
+
+                    // Cancel Button
+                    OutlinedButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      style: OutlinedButton.styleFrom(
+                        side: BorderSide(color: Colors.grey.shade300, width: 2),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        padding: const EdgeInsets.symmetric(vertical: 16),
+                      ),
+                      child: const Text(
+                        "Cancel",
                         style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.bold,
-                          color: Colors.white,
+                          color: Colors.grey,
                         ),
                       ),
-              ),
-              const SizedBox(height: 12),
-
-              // Cancel Button
-              OutlinedButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                style: OutlinedButton.styleFrom(
-                  side: BorderSide(color: Colors.grey.shade300, width: 2),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  padding: const EdgeInsets.symmetric(vertical: 16),
-                ),
-                child: const Text(
-                  "Cancel",
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.grey,
-                  ),
+                    ),
+                  ],
                 ),
               ),
-            ],
-          ),
-        ),
-      ),
+            ),
     );
   }
 }
