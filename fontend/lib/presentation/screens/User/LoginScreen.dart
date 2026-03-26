@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shop_owner_screen/presentation/screens/ShopOwner/list_product_management_screen.dart';
+import 'package:shop_owner_screen/presentation/screens/ShopOwner/dashboard.dart';
 import 'package:shop_owner_screen/presentation/screens/User/product_list_user_screen.dart';
 import 'package:shop_owner_screen/presentation/screens/User/user_main_shell_screen.dart';
 import 'RegisterScreen.dart';
@@ -74,7 +75,7 @@ class _LoginScreenState extends State<LoginScreen> {
           } else if (roleId == 2) {
             Navigator.pushReplacement(
               context,
-              MaterialPageRoute(builder: (context) => ListProductManagementScreen(userId: userId!)),
+              MaterialPageRoute(builder: (context) => DashboardScreen(userId: userId!)),
             );
           } else if (roleId == 3){
             Navigator.pushReplacement(context, 

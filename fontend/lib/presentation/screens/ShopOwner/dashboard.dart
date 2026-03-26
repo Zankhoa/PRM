@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:shop_owner_screen/presentation/widgets/CustomBottomNav/custom_bottom_shopwoner.dart';
 import 'package:shop_owner_screen/data/models/shop_dashboard_dto.dart';
 import 'package:shop_owner_screen/data/service/shop_owner_service.dart';
-import 'package:shop_owner_screen/presentation/screens/ShopOwner/list_product_management_screen.dart';
 import 'package:shop_owner_screen/presentation/screens/ShopOwner/discount/list_discount.dart';
 import 'package:shop_owner_screen/presentation/screens/ShopOwner/profile.dart';
 
@@ -49,6 +49,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
     return Scaffold(
       backgroundColor: const Color(0xFFF5F6FA),
       body: _buildBody(),
+      bottomNavigationBar: CustomBottomNavShopOwner(
+        userId: widget.userId,
+        currentTab: kTabDashboard,
+      ),
     );
   }
 
@@ -237,38 +241,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(height: 12),
-                  GridView.count(
-                    physics: const NeverScrollableScrollPhysics(),
-                    shrinkWrap: true,
-                    crossAxisCount: 2,
-                    crossAxisSpacing: 12,
-                    mainAxisSpacing: 12,
-                    childAspectRatio: 1.1,
-                    children: [
-                      _buildMenuCard('Sản phẩm', Icons.fastfood_rounded, () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (_) => ListProductManagementScreen(userId: widget.userId),
-                          ),
-                        );
-                      }),
-                      _buildMenuCard('Khuyến mãi', Icons.local_offer_rounded, () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (_) => const ListDiscountScreen()),
-                        );
-                      }),
-                      _buildMenuCard('Hồ sơ', Icons.person_rounded, () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (_) => ProfileScreen(userId: widget.userId),
-                          ),
-                        );
-                      }),
-                    ],
-                  ),
+                  _buildMenuCard('Khuyến mãi', Icons.local_offer_rounded, () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (_) => ListDiscountScreen(userId: widget.userId)),
+                    );
+                  }),
                   const SizedBox(height: 32),
                 ],
               ),

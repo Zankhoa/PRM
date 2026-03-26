@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shop_owner_screen/presentation/widgets/CustomBottomNav/custom_bottom_shopwoner.dart';
 import 'package:shop_owner_screen/data/models/shop_profile_dto.dart';
 import 'package:shop_owner_screen/data/service/shop_owner_service.dart';
 import 'package:shop_owner_screen/presentation/screens/ShopOwner/edit_profile.dart';
@@ -47,6 +48,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
     return Scaffold(
       backgroundColor: const Color(0xFFF5F6FA),
       body: _buildBody(),
+      bottomNavigationBar: CustomBottomNavShopOwner(
+        userId: widget.userId,
+        currentTab: kTabProfile,
+      ),
     );
   }
 

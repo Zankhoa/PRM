@@ -28,7 +28,7 @@ void main() async {
       // 2. Added '!' to tell Dart it is definitely not null
       startingScreen = const UserMainShellScreen(userId: 1); 
     } else if (roleId == 2) {
-      startingScreen = DashboardScreen(userId: 2);
+      startingScreen = DashboardScreen(userId: userId!);
     } else if (roleId == 3) {
       startingScreen = ProductListUserScreen(
         userId: userId!, 

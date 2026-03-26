@@ -165,7 +165,10 @@ class _ListProductManagementScreenState extends State<ListProductManagementScree
         ],
       ),
       // Gọi lại thanh điều hướng dùng chung
-      bottomNavigationBar: const CustomBottomNav(), 
+      bottomNavigationBar: CustomBottomNavShopOwner(
+        userId: widget.userId,
+        currentTab: kTabProducts,
+      ),
     );
   }
 
