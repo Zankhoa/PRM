@@ -98,10 +98,11 @@ class ShopOwnerApp extends StatelessWidget {
             );
           case '/discounts':
             return MaterialPageRoute(
-                builder: (_) => const ListDiscountScreen());
+                builder: (_) => const ListDiscountScreen(userId: defaultUserId));
           case '/add-discount':
             return MaterialPageRoute(
-                builder: (_) => const CreateDiscountScreen());
+                builder: (_) =>
+                    const CreateDiscountScreen(userId: defaultUserId));
           case '/create-product':
             return MaterialPageRoute(builder: (_) => const CreateProduct());
           case '/manage-product':

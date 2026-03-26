@@ -23,6 +23,7 @@ public static class DatabaseBootstrap
     public static async Task RunAsync(AppDbContext db, CancellationToken ct = default)
     {
         await EnsureCartItemTableAsync(db, ct);
+        await EnsureBlogAndNotificationTablesAsync(db, ct);
         await EnsureDemoCatalogAsync(db, ct);
     }
 

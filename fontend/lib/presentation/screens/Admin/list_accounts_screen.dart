@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shop_owner_screen/data/models/account_manage_dto.dart';
 import 'package:shop_owner_screen/data/service/admin_account_service.dart';
 import 'package:shop_owner_screen/presentation/screens/Admin/create_account_screen.dart';
 import 'package:shop_owner_screen/presentation/screens/Admin/update_account_screen.dart';
+import 'package:shop_owner_screen/presentation/screens/User/LoginScreen.dart';
 import 'package:shop_owner_screen/presentation/theme/food_order_ui.dart';
 
 class ListAccountsScreen extends StatefulWidget {
@@ -53,6 +55,18 @@ class _ListAccountsScreenState extends State<ListAccountsScreen> {
     }
   }
 
+  Future<void> _logout() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.clear();
+
+    if (!mounted) return;
+    Navigator.pushAndRemoveUntil(
+      context,
+      MaterialPageRoute(builder: (_) => const LoginScreen()),
+      (route) => false,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final query = _searchController.text.trim().toLowerCase();
@@ -65,7 +79,16 @@ class _ListAccountsScreenState extends State<ListAccountsScreen> {
 
     return Scaffold(
       backgroundColor: FoodOrderUi.scaffoldBg,
-      appBar: AppBar(title: const Text('Quản lý tài khoản')),
+      appBar: AppBar(
+        title: const Text('Quản lý tài khoản'),
+        actions: [
+          IconButton(
+            tooltip: 'Logout',
+            onPressed: _logout,
+            icon: const Icon(Icons.logout_rounded),
+          ),
+        ],
+      ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () async {
           await Navigator.of(context).push(
