@@ -5,6 +5,7 @@ import 'package:shop_owner_screen/presentation/theme/food_order_ui.dart';
 import 'package:shop_owner_screen/presentation/widgets/user_cart/empty_cart_view.dart';
 import 'package:shop_owner_screen/presentation/widgets/user_menu/product_image.dart';
 import 'package:shop_owner_screen/presentation/screens/User/checkout_user_screen.dart';
+import 'package:shop_owner_screen/presentation/widgets/CustomBottomNav/custom_bottom_user.dart';
 
 class CartUserScreen extends StatefulWidget {
   final int userId;
@@ -264,6 +265,7 @@ class _CartUserScreenState extends State<CartUserScreen> {
           );
         },
       ),
+      bottomNavigationBar: CustomBottomNav(userId: widget.userId),
     );
   }
 

@@ -62,9 +62,13 @@ class _LoginScreenState extends State<LoginScreen> {
         await prefs.setInt('userId', userId);
         if (roleId != null) {
           await prefs.setInt('roleId', roleId);
+        } else {
+          await prefs.remove('roleId');
         }
         if (roleName != null && roleName.isNotEmpty) {
           await prefs.setString('roleName', roleName);
+        } else {
+          await prefs.remove('roleName');
         }
         await prefs.setString('username', username);
 

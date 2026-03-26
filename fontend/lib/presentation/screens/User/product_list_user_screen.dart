@@ -7,6 +7,7 @@ import 'package:shop_owner_screen/presentation/screens/User/notifications_screen
 import 'package:shop_owner_screen/presentation/screens/User/payment_status_screen.dart';
 import 'package:shop_owner_screen/presentation/screens/User/product_detail_user_screen.dart';
 import 'package:shop_owner_screen/presentation/theme/food_order_ui.dart';
+import 'package:shop_owner_screen/presentation/widgets/CustomBottomNav/custom_bottom_user.dart';
 import 'package:shop_owner_screen/presentation/widgets/user_menu/product_grid_card.dart';
 
 class ProductListUserScreen extends StatefulWidget {
@@ -283,6 +284,7 @@ class _ProductListUserScreenState extends State<ProductListUserScreen> {
           ),
         ],
       ),
+      bottomNavigationBar: CustomBottomNav(userId: widget.userId),
     );
   }
 }

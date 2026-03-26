@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using SystemFoodOrder.Model.Entities;
 
 namespace SystemFoodOrder.Data;
@@ -40,11 +41,20 @@ public partial class AppDbContext : DbContext
             return;
         }
 
+        var config = new ConfigurationBuilder()
+            .AddJsonFile("appsettings.json", optional: true)
+            .Build();
+        var connectionString = config.GetConnectionString("DefaultConnection");
+        if (!string.IsNullOrWhiteSpace(connectionString))
+        {
+            optionsBuilder.UseSqlServer(connectionString);
+            return;
+        }
+
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
         // Fallback connection string for design-time or when DI is not used. Match user's SQLEXPRESS instance.
-        optionsBuilder.UseSqlServer("Server=localhost\\SQLEXPRESS;Database=FoodOrderSystem;Trusted_Connection=True;TrustServerCertificate=True;");
+        optionsBuilder.UseSqlServer("Server=localhost\\SQLEXPRESS;Database=FoodOrderSystem;Trusted_Connection=True;TrustServerCertificate=True;MultipleActiveResultSets=True;");
     }
-
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Order>(entity =>

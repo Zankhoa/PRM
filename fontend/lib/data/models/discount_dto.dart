@@ -22,7 +22,7 @@ class DiscountDTO {
       startDate: json['startDate'] ?? '',
       endDate: json['endDate'] ?? '',
       percentDiscount: json['percentDiscount'] ?? 0,
-      isActive: json['isActive'] ?? false,
+      isActive: (json['isActived'] ?? json['isActive'] ?? false) == true || (json['isActived'] ?? json['isActive'] ?? 0) == 1,
     );
   }
 }

@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:shop_owner_screen/presentation/screens/User/product_list_user_screen.dart';
+import 'package:shop_owner_screen/presentation/screens/User/cart_user_screen.dart';
+import 'package:shop_owner_screen/presentation/screens/User/UserProfileScreen.dart';
 
 class CustomBottomNav extends StatelessWidget {
-  const CustomBottomNav({super.key});
+  final int userId;
+
+  const CustomBottomNav({super.key, required this.userId});
 
   @override
   Widget build(BuildContext context) {
@@ -22,10 +27,58 @@ class CustomBottomNav extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              _buildNavItem(context, Icons.discount_outlined, 'Dashboard', false, '/dashboard'),
-              _buildNavItem(context, Icons.shopping_cart_outlined, 'Đơn hàng', true, '/verify-order'),
-              _buildNavItem(context, Icons.person_outline, 'Hồ sơ', false, '/profile'),
-              _buildNavItem(context, Icons.inventory_2_outlined, 'Sản phẩm', false, '/manage-product'),
+              // 1. Sản phẩm (Product List)
+              _buildNavItem(
+                context: context,
+                icon: Icons.inventory_2_outlined,
+                label: 'Sản phẩm',
+                isActive: false, // You can make this dynamic later if you want
+                destination: ProductListUserScreen(
+                  userId: userId,
+                  onCartChanged: () {}, // Empty callback for now
+                ),
+              ),
+
+              // 2. Đơn hàng (Cart/Orders)
+              _buildNavItem(
+                context: context,
+                icon: Icons.shopping_cart_outlined,
+                label: 'Đơn hàng',
+                isActive: false,
+                destination: CartUserScreen(
+                  userId: userId,
+                  // When the cart is empty, this sends them back to the Menu
+                  onGoToMenu: () {
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => ProductListUserScreen(
+                          userId: userId,
+                          onCartChanged: () {},
+                        ),
+                      ),
+                    );
+                  },
+                  // When checkout is successful, show a message
+                  onCheckoutSuccess: () {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text('Đặt hàng thành công!'), // "Order successful!"
+                        backgroundColor: Colors.green,
+                      ),
+                    );
+                  },
+                ),
+              ),
+
+              // 3. Hồ sơ (Profile)
+              _buildNavItem(
+                context: context,
+                icon: Icons.person_outline,
+                label: 'Hồ sơ',
+                isActive: false,
+                destination: UserProfileScreen(userId: userId),
+              ),
             ],
           ),
         ),
@@ -33,9 +86,22 @@ class CustomBottomNav extends StatelessWidget {
     );
   }
 
-  Widget _buildNavItem(BuildContext context, IconData icon, String label, bool isActive, String routeName) {
+  // NEW: Changed routeName (String) to destination (Widget)
+  Widget _buildNavItem({
+    required BuildContext context,
+    required IconData icon,
+    required String label,
+    required bool isActive,
+    required Widget destination,
+  }) {
     return InkWell(
-      onTap: () => Navigator.pushNamed(context, routeName),
+      onTap: () {
+        // Use pushReplacement so the back button doesn't build up a massive stack of screens
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => destination),
+        );
+      },
       borderRadius: BorderRadius.circular(12),
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),

@@ -6,9 +6,12 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shop_owner_screen/data/api_config.dart';
+import 'package:shop_owner_screen/presentation/widgets/CustomBottomNav/custom_bottom_user.dart';
 
 class UserProfileScreen extends StatefulWidget {
-  const UserProfileScreen({super.key});
+  final int userId;
+
+  const UserProfileScreen({super.key, required this.userId});
 
   @override
   State<UserProfileScreen> createState() => _UserProfileScreenState();
@@ -283,6 +286,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                     ],
                   ),
                 ),
+                bottomNavigationBar: CustomBottomNav(userId: widget.userId),
     );
   }
 

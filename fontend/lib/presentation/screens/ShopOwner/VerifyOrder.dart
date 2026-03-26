@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:shop_owner_screen/data/models/verify_order_dto.dart';
 import 'package:shop_owner_screen/data/service/verify_order_service.dart';
+import 'package:shop_owner_screen/presentation/widgets/CustomBottomNav/custom_bottom_shopwoner.dart';
 
 class VerifyOrder extends StatefulWidget {
   final int userId; 
@@ -181,7 +182,10 @@ class _VerifyOrderState extends State<VerifyOrder> {
           ),
         ],
       ),
-      bottomNavigationBar: _buildBottomNav(context),
+      bottomNavigationBar: CustomBottomNavShopOwner(
+        userId: widget.userId,
+        currentTab: kTabOrders,
+      ),
     );
   }
 
