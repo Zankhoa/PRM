@@ -3,6 +3,7 @@ import 'package:shop_owner_screen/data/models/user_product_dto.dart';
 import 'package:shop_owner_screen/data/service/user_cart_api_service.dart';
 import 'package:shop_owner_screen/data/service/user_catalog_service.dart';
 import 'package:shop_owner_screen/presentation/theme/food_order_ui.dart';
+import 'package:shop_owner_screen/presentation/widgets/CustomBottomNav/custom_bottom_user.dart';
 import 'package:shop_owner_screen/presentation/widgets/user_menu/product_grid_card.dart';
 import 'package:shop_owner_screen/presentation/screens/User/product_detail_user_screen.dart';
 
@@ -229,6 +230,7 @@ class _ProductListUserScreenState extends State<ProductListUserScreen> {
           ),
         ],
       ),
+      bottomNavigationBar: CustomBottomNav(userId: widget.userId),
     );
   }
 }

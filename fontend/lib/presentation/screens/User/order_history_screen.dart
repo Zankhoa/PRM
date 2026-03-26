@@ -143,7 +143,7 @@ class _OrderHistoryScreenState extends State<OrderHistoryScreen> {
           ),
         ],
       ),
-      bottomNavigationBar: const CustomBottomNav(),
+      bottomNavigationBar: CustomBottomNav(userId: widget.userId),
     );
   }
 }
